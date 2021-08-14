@@ -3,11 +3,7 @@
  */
 class ExtendableError extends Error {
   constructor({
-    message,
-    errors,
-    status,
-    isPublic,
-    stack,
+    message, errors, status, isPublic, stack,
   }) {
     super(message);
     this.name = this.constructor.name;
@@ -21,4 +17,4 @@ class ExtendableError extends Error {
   }
 }
 
-module.exports = ExtendableError;
+export default ExtendableError;

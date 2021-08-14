@@ -1,22 +1,23 @@
 # Production ready expressjs app
 
-Modified from the boilerplate [here]().  Major changes - 
+Modified from the boilerplate [here](). Major changes -
 
 **Added**
 
-* Use prettier
-* Use eslint-config-unicorn
+- Use typescript
+- Use prettier
+- Use eslint-config-unicorn
 
 **Removed**
 
-* Docker
-* coveralls
-* travis
-
+- Docker
+- coveralls
+- travis
 
 **Changed**
 
-* Connect to SQL Server instead of MongoDB
+- Connect to SQL Server instead of MongoDB
+- ESM instead of CJS (conversion done through the cjs-to-es6 CLI)
 
 #### Install dependencies:
 
@@ -35,7 +36,8 @@ cp .env.example .env
 ```bash
 yarn dev
 ```
-* Hit http://localhost:3000/v1/status to verify if it is up - the v1 can vary based on the API version
+
+- Hit http://localhost:3000/v1/status to verify if it is up - the v1 can vary based on the API version
 
 ## Running in Production
 

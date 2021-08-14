@@ -1,13 +1,13 @@
-const { ExtractJwt, Strategy: JwtStrategy } = require('passport-jwt');
-const { jwtSecret } = require('./vars');
-const User = require('../api/models/user.model');
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import User from '../api/models/user.model';
+import { jwtSecret } from './vars';
 
 const jwtOptions = {
   secretOrKey: jwtSecret,
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
 };
 
-const jwt = async (payload, done) => {
+async function jwtCb(payload, done) {
   try {
     const user = await User.findById(payload.sub);
     // cons user = 'hardcoded-username'
@@ -16,6 +16,6 @@ const jwt = async (payload, done) => {
   } catch (error) {
     return done(error, false);
   }
-};
+}
 
-exports.jwt = new JwtStrategy(jwtOptions, jwt);
+export const jwt = new JwtStrategy(jwtOptions, jwtCb);

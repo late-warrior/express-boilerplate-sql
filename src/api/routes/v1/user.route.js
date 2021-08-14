@@ -1,13 +1,10 @@
-const express = require('express');
-const validate = require('express-validation');
-const controller = require('../../controllers/user.controller');
-const { authorize, ADMIN, LOGGED_USER } = require('../../middlewares/auth');
-const {
-  listUsers,
-  createUser,
-  replaceUser,
-  updateUser,
-} = require('../../validations/user.validation');
+import express from 'express';
+import validate from 'express-validation';
+import controller from '../../controllers/user.controller';
+import { authorize, ADMIN, LOGGED_USER } from '../../middlewares/auth';
+import {
+  listUsers, createUser, replaceUser, updateUser,
+} from '../../validations/user.validation';
 
 const router = express.Router();
 
@@ -186,4 +183,4 @@ router
    */
   .delete(authorize(LOGGED_USER), controller.remove);
 
-module.exports = router;
+export default router;

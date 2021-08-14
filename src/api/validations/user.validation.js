@@ -1,8 +1,7 @@
-const Joi = require('joi');
-const User = require('../models/user.model');
+import Joi from 'joi';
+import User from '../models/user.model';
 
-module.exports = {
-
+export default {
   // GET /v1/users
   listUsers: {
     query: {
@@ -33,7 +32,9 @@ module.exports = {
       role: Joi.string().valid(User.roles),
     },
     params: {
-      userId: Joi.string().regex(/^[\dA-Fa-f]{24}$/).required(),
+      userId: Joi.string()
+        .regex(/^[\dA-Fa-f]{24}$/)
+        .required(),
     },
   },
 
@@ -46,7 +47,9 @@ module.exports = {
       role: Joi.string().valid(User.roles),
     },
     params: {
-      userId: Joi.string().regex(/^[\dA-Fa-f]{24}$/).required(),
+      userId: Joi.string()
+        .regex(/^[\dA-Fa-f]{24}$/)
+        .required(),
     },
   },
 };

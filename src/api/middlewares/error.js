@@ -1,7 +1,7 @@
-const httpStatus = require('http-status');
-const expressValidation = require('express-validation');
-const APIError = require('../errors/api-error');
-const { env } = require('../../config/vars');
+import httpStatus from 'http-status';
+import expressValidation from 'express-validation';
+import APIError from '../errors/api-error';
+import { env } from '../../config/vars';
 
 /**
  * Error handler. Send stacktrace only during development
@@ -22,13 +22,13 @@ const handler = (err, req, res, next) => {
   res.status(err.status);
   res.json(response);
 };
-exports.handler = handler;
+export { handler };
 
 /**
  * If error is not an instanceOf APIError, convert it.
  * @public
  */
-exports.converter = (err, req, res, next) => {
+export const converter = (err, req, res, next) => {
   let convertedError = err;
 
   if (err instanceof expressValidation.ValidationError) {
@@ -53,7 +53,7 @@ exports.converter = (err, req, res, next) => {
  * Catch 404 and forward to error handler
  * @public
  */
-exports.notFound = (req, res, next) => {
+export const notFound = (req, res, next) => {
   const err = new APIError({
     message: 'Not found',
     status: httpStatus.NOT_FOUND,
