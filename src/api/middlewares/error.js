@@ -1,13 +1,13 @@
-import httpStatus from 'http-status';
 import expressValidation from 'express-validation';
-import APIError from '../errors/api-error';
+import httpStatus from 'http-status';
 import { env } from '../../config/vars';
+import APIError from '../errors/api-error';
 
 /**
  * Error handler. Send stacktrace only during development
  * @public
  */
-const handler = (err, req, res, next) => {
+export const handler = (err, req, res, next) => {
   const response = {
     code: err.status,
     message: err.message || httpStatus[err.status],
@@ -22,7 +22,6 @@ const handler = (err, req, res, next) => {
   res.status(err.status);
   res.json(response);
 };
-export { handler };
 
 /**
  * If error is not an instanceOf APIError, convert it.

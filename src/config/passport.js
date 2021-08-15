@@ -1,5 +1,4 @@
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import User from '../api/models/user.model';
 import { jwtSecret } from './vars';
 
 const jwtOptions = {
@@ -7,10 +6,13 @@ const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
 };
 
+async function findUser(token) {
+  return { name: 'hardcoded', id: 123 };
+}
+
 async function jwtCb(payload, done) {
   try {
-    const user = await User.findById(payload.sub);
-    // cons user = 'hardcoded-username'
+    const user = await findUser();
     if (user) return done(null, user);
     return done(null, false);
   } catch (error) {

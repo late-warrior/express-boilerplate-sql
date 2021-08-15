@@ -1,15 +1,15 @@
-import express from 'express';
-import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import compress from 'compression';
-import methodOverride from 'method-override';
 import cors from 'cors';
+import express from 'express';
 import helmet from 'helmet';
+import methodOverride from 'method-override';
+import morgan from 'morgan';
 import passport from 'passport';
+import { converter, handler, notFound } from '../api/middlewares/error';
 import routes from '../api/routes/v1';
+import { jwt } from './passport';
 import { logs } from './vars';
-import strategies from './passport';
-import error from '../api/middlewares/error';
 
 /**
  * Express instance
@@ -39,18 +39,18 @@ app.use(cors());
 
 // enable authentication
 app.use(passport.initialize());
-passport.use('jwt', strategies.jwt);
+passport.use('jwt', jwt);
 
 // mount api v1 routes
 app.use('/v1', routes);
 
 // if error is not an instanceOf APIError, convert it.
-app.use(error.converter);
+app.use(converter);
 
 // catch 404 and forward to error handler
-app.use(error.notFound);
+app.use(notFound);
 
 // error handler, send stacktrace only during development
-app.use(error.handler);
+app.use(handler);
 
 export default app;

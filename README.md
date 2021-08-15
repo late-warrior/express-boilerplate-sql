@@ -101,3 +101,8 @@ yarn docs
 ## Deploy
 
 Custom deployment setup
+
+## Debugging
+
+- Bump up the log levels to get detailed logging of what is going on
+- Follow the tutorial to help you debug the lifecycle of a request
