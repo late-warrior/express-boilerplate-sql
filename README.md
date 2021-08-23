@@ -6,7 +6,7 @@ Modified from the boilerplate [here](). Major changes -
 
 - Use typescript
 - Use prettier
-- Use eslint-config-unicorn
+- Use eslint-config-unicorn - for some enforcing some generally good practices
 
 **Removed**
 
@@ -16,8 +16,18 @@ Modified from the boilerplate [here](). Major changes -
 
 **Changed**
 
-- Connect to SQL Server instead of MongoDB
+- Connect to SQL Server (SQLLite in development) instead of MongoDB
 - ESM instead of CJS (conversion done through the cjs-to-es6 CLI)
+
+### Code organization
+
+This repo organizes code according to DDD principles - it uses the CQRS pattern to separate commands and queries (or use different models).
+There is an explicit domain layer and an infrastructure layer. The infrastructure layer should not need to use the domain layer.
+
+#### Domain
+
+The domain here models a simple ecommerce application. Unauthorized users can search among various items. They can choose an item, add it to cart.
+For placing an order, they need to be authenticated.
 
 #### Install dependencies:
 
@@ -100,7 +110,8 @@ yarn docs
 
 ## Deploy
 
-Custom deployment setup
+- Supports deployment through docker
+- Uses nginx as a reverse proxy to handle high load
 
 ## Debugging
 
