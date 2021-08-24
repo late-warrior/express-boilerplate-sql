@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Express boilerplate for building RESTful APIs",
   "author": "Sriram",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "private": false,
   "license": "MIT",
   "engines": {
@@ -27,7 +27,9 @@
     "validate": "yarn lint && yarn prettier && yarn test",
     "docs": "apidoc -i src -o docs",
     "postdocs": "open-cli docs/index.html",
-    "burn-them-all": "rm -rf node_modules yarn.lock && yarn"
+    "burn-them-all": "rm -rf node_modules yarn.lock && yarn",
+    "test:new1": "mocha",
+    "test:new": "mocha --recursive ./test/*.{js,ts}"
   },
   "repository": {
     "type": "git",
@@ -99,6 +101,7 @@
     "sinon": "^7.5.0",
     "sinon-chai": "^3.0.0",
     "supertest": "^6.1.3",
+    "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
   }
 }

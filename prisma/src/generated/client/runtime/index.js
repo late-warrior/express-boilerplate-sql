@@ -30149,7 +30149,7 @@ var require_dist11 = __commonJS2((exports2) => {
   var import_util22 = __toModule3(require_util4());
 });
 
-// ../sdk/dist/logger.js
+// ../../node_modules/.pnpm/@prisma+sdk@2.29.0/node_modules/@prisma/sdk/dist/logger.js
 var require_logger = __commonJS2((exports2) => {
   var __create3 = Object.create;
   var __defProp3 = Object.defineProperty;
@@ -30212,7 +30212,7 @@ var require_logger = __commonJS2((exports2) => {
   }
 });
 
-// ../sdk/dist/utils/mapPreviewFeatures.js
+// ../../node_modules/.pnpm/@prisma+sdk@2.29.0/node_modules/@prisma/sdk/dist/utils/mapPreviewFeatures.js
 var require_mapPreviewFeatures = __commonJS2((exports2) => {
   var __defProp3 = Object.defineProperty;
   var __markAsModule3 = (target) => __defProp3(target, "__esModule", {value: true});
@@ -30236,6 +30236,437 @@ var require_mapPreviewFeatures = __commonJS2((exports2) => {
       });
     }
     return [];
+  }
+});
+
+// ../../node_modules/.pnpm/@prisma+debug@2.29.0/node_modules/@prisma/debug/dist/common.js
+var require_common8 = __commonJS2((exports2) => {
+  var __defProp3 = Object.defineProperty;
+  var __markAsModule3 = (target) => __defProp3(target, "__esModule", {value: true});
+  var __export3 = (target, all) => {
+    __markAsModule3(target);
+    for (var name in all)
+      __defProp3(target, name, {get: all[name], enumerable: true});
+  };
+  __export3(exports2, {
+    setup: () => setup
+  });
+  function setup(env) {
+    const createDebug = (namespace, logger3) => {
+      let prevTime;
+      let enableOverride = null;
+      let namespacesCache;
+      let enabledCache;
+      const debug6 = (...args) => {
+        const self = debug6;
+        const curr = Number(new Date());
+        const ms = curr - (prevTime || curr);
+        self.diff = ms;
+        self.prev = prevTime;
+        self.curr = curr;
+        prevTime = curr;
+        args[0] = createDebug.coerce(args[0]);
+        if (typeof args[0] !== "string") {
+          args.unshift("%O");
+        }
+        let index = 0;
+        args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
+          if (match === "%%") {
+            return "%";
+          }
+          index++;
+          const formatter = createDebug.formatters[format];
+          if (typeof formatter === "function") {
+            const val = args[index];
+            match = formatter.call(self, val);
+            args.splice(index, 1);
+            index--;
+          }
+          return match;
+        });
+        createDebug.formatArgs.call(self, args);
+        if (logger3 && typeof logger3 === "function") {
+          logger3.apply(self, args);
+        }
+        if (debug6.enabled) {
+          const logFn = self.log || createDebug.log;
+          logFn.apply(self, args);
+        }
+      };
+      debug6.namespace = namespace;
+      debug6.useColors = createDebug.useColors();
+      debug6.color = createDebug.selectColor(namespace);
+      debug6.extend = extend;
+      debug6.destroy = createDebug.destroy;
+      Object.defineProperty(debug6, "enabled", {
+        enumerable: true,
+        configurable: false,
+        get: () => {
+          if (enableOverride !== null) {
+            return enableOverride;
+          }
+          if (namespacesCache !== createDebug.namespaces) {
+            namespacesCache = createDebug.namespaces;
+            enabledCache = createDebug.enabled(namespace);
+          }
+          return enabledCache;
+        },
+        set: (v) => {
+          enableOverride = v;
+        }
+      });
+      if (typeof createDebug.init === "function") {
+        createDebug.init(debug6);
+      }
+      return debug6;
+    };
+    createDebug.debug = createDebug;
+    createDebug.default = createDebug;
+    createDebug.coerce = coerce;
+    createDebug.disable = disable;
+    createDebug.enable = enable;
+    createDebug.enabled = enabled;
+    createDebug.humanize = require_ms3();
+    createDebug.destroy = destroy;
+    Object.keys(env).forEach((key) => {
+      createDebug[key] = env[key];
+    });
+    createDebug.names = [];
+    createDebug.skips = [];
+    createDebug.formatters = {};
+    function selectColor(namespace) {
+      let hash = 0;
+      for (let i = 0; i < namespace.length; i++) {
+        hash = (hash << 5) - hash + namespace.charCodeAt(i);
+        hash |= 0;
+      }
+      return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+    }
+    createDebug.selectColor = selectColor;
+    function extend(namespace, delimiter) {
+      const newDebug = createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
+      newDebug.log = this.log;
+      return newDebug;
+    }
+    function enable(namespaces) {
+      createDebug.save(namespaces);
+      createDebug.namespaces = namespaces;
+      createDebug.names = [];
+      createDebug.skips = [];
+      let i;
+      const split = (typeof namespaces === "string" ? namespaces : "").split(/[\s,]+/);
+      const len = split.length;
+      for (i = 0; i < len; i++) {
+        if (!split[i]) {
+          continue;
+        }
+        namespaces = split[i].replace(/\*/g, ".*?");
+        if (namespaces[0] === "-") {
+          createDebug.skips.push(new RegExp("^" + namespaces.substr(1) + "$"));
+        } else {
+          createDebug.names.push(new RegExp("^" + namespaces + "$"));
+        }
+      }
+    }
+    function disable() {
+      const namespaces = [
+        ...createDebug.names.map(toNamespace),
+        ...createDebug.skips.map(toNamespace).map((namespace) => "-" + namespace)
+      ].join(",");
+      createDebug.enable("");
+      return namespaces;
+    }
+    function enabled(name) {
+      if (name[name.length - 1] === "*") {
+        return true;
+      }
+      let i;
+      let len;
+      for (i = 0, len = createDebug.skips.length; i < len; i++) {
+        if (createDebug.skips[i].test(name)) {
+          return false;
+        }
+      }
+      for (i = 0, len = createDebug.names.length; i < len; i++) {
+        if (createDebug.names[i].test(name)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    function toNamespace(regexp) {
+      return regexp.toString().substring(2, regexp.toString().length - 2).replace(/\.\*\?$/, "*");
+    }
+    function coerce(val) {
+      if (val instanceof Error) {
+        return val.stack || val.message;
+      }
+      return val;
+    }
+    function destroy() {
+      console.warn("Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
+    }
+    createDebug.enable(createDebug.load());
+    return createDebug;
+  }
+});
+
+// ../../node_modules/.pnpm/@prisma+debug@2.29.0/node_modules/@prisma/debug/dist/node.js
+var require_node5 = __commonJS2((exports2, module2) => {
+  var __create3 = Object.create;
+  var __defProp3 = Object.defineProperty;
+  var __getOwnPropDesc3 = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames3 = Object.getOwnPropertyNames;
+  var __getProtoOf3 = Object.getPrototypeOf;
+  var __hasOwnProp3 = Object.prototype.hasOwnProperty;
+  var __markAsModule3 = (target) => __defProp3(target, "__esModule", {value: true});
+  var __export3 = (target, all) => {
+    __markAsModule3(target);
+    for (var name in all)
+      __defProp3(target, name, {get: all[name], enumerable: true});
+  };
+  var __reExport2 = (target, module22, desc) => {
+    if (module22 && typeof module22 === "object" || typeof module22 === "function") {
+      for (let key of __getOwnPropNames3(module22))
+        if (!__hasOwnProp3.call(target, key) && key !== "default")
+          __defProp3(target, key, {get: () => module22[key], enumerable: !(desc = __getOwnPropDesc3(module22, key)) || desc.enumerable});
+    }
+    return target;
+  };
+  var __toModule3 = (module22) => {
+    return __reExport2(__markAsModule3(__defProp3(module22 != null ? __create3(__getProtoOf3(module22)) : {}, "default", module22 && module22.__esModule && "default" in module22 ? {get: () => module22.default, enumerable: true} : {value: module22, enumerable: true})), module22);
+  };
+  __export3(exports2, {
+    default: () => node_default
+  });
+  var import_common4 = __toModule3(require_common8());
+  var tty = require("tty");
+  var util = require("util");
+  exports2.init = init;
+  exports2.log = log4;
+  exports2.formatArgs = formatArgs;
+  exports2.save = save;
+  exports2.load = load;
+  exports2.useColors = useColors;
+  exports2.destroy = util.deprecate(() => {
+  }, "Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
+  exports2.colors = [6, 2, 3, 4, 5, 1];
+  try {
+    const supportsColor = require_supports_color2();
+    if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
+      exports2.colors = [
+        20,
+        21,
+        26,
+        27,
+        32,
+        33,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        56,
+        57,
+        62,
+        63,
+        68,
+        69,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        92,
+        93,
+        98,
+        99,
+        112,
+        113,
+        128,
+        129,
+        134,
+        135,
+        148,
+        149,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        178,
+        179,
+        184,
+        185,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        214,
+        215,
+        220,
+        221
+      ];
+    }
+  } catch (error) {
+  }
+  exports2.inspectOpts = Object.keys(process.env).filter((key) => {
+    return /^debug_/i.test(key);
+  }).reduce((obj, key) => {
+    const prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, (_, k) => {
+      return k.toUpperCase();
+    });
+    let val = process.env[key];
+    if (/^(yes|on|true|enabled)$/i.test(val)) {
+      val = true;
+    } else if (/^(no|off|false|disabled)$/i.test(val)) {
+      val = false;
+    } else if (val === "null") {
+      val = null;
+    } else {
+      val = Number(val);
+    }
+    obj[prop] = val;
+    return obj;
+  }, {});
+  function useColors() {
+    return "colors" in exports2.inspectOpts ? Boolean(exports2.inspectOpts.colors) : tty.isatty(process.stderr.fd);
+  }
+  function formatArgs(args) {
+    const {namespace: name, useColors: useColors2} = this;
+    if (useColors2) {
+      const c = this.color;
+      const colorCode = "[3" + (c < 8 ? c : "8;5;" + c);
+      const prefix = `  ${colorCode};1m${name} [0m`;
+      args[0] = prefix + args[0].split("\n").join("\n" + prefix);
+      args.push(colorCode + "m+" + module2.exports.humanize(this.diff) + "[0m");
+    } else {
+      args[0] = getDate() + name + " " + args[0];
+    }
+  }
+  function getDate() {
+    if (exports2.inspectOpts.hideDate) {
+      return "";
+    }
+    return new Date().toISOString() + " ";
+  }
+  function log4(...args) {
+    return process.stderr.write(util.format(...args) + "\n");
+  }
+  function save(namespaces) {
+    if (namespaces) {
+      process.env.DEBUG = namespaces;
+    } else {
+      delete process.env.DEBUG;
+    }
+  }
+  function load() {
+    return process.env.DEBUG;
+  }
+  function init(debug6) {
+    debug6.inspectOpts = {};
+    const keys2 = Object.keys(exports2.inspectOpts);
+    for (let i = 0; i < keys2.length; i++) {
+      debug6.inspectOpts[keys2[i]] = exports2.inspectOpts[keys2[i]];
+    }
+  }
+  var mod2 = (0, import_common4.setup)(exports2);
+  module2.exports = mod2;
+  var node_default = mod2;
+  var {formatters} = mod2;
+  formatters.o = function(v) {
+    this.inspectOpts.colors = this.useColors;
+    return util.inspect(v, this.inspectOpts).split("\n").map((str) => str.trim()).join(" ");
+  };
+  formatters.O = function(v) {
+    this.inspectOpts.colors = this.useColors;
+    return util.inspect(v, this.inspectOpts);
+  };
+});
+
+// ../../node_modules/.pnpm/@prisma+debug@2.29.0/node_modules/@prisma/debug/dist/index.js
+var require_dist12 = __commonJS2((exports2) => {
+  var __create3 = Object.create;
+  var __defProp3 = Object.defineProperty;
+  var __getOwnPropDesc3 = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames3 = Object.getOwnPropertyNames;
+  var __getProtoOf3 = Object.getPrototypeOf;
+  var __hasOwnProp3 = Object.prototype.hasOwnProperty;
+  var __markAsModule3 = (target) => __defProp3(target, "__esModule", {value: true});
+  var __export3 = (target, all) => {
+    __markAsModule3(target);
+    for (var name in all)
+      __defProp3(target, name, {get: all[name], enumerable: true});
+  };
+  var __reExport2 = (target, module22, desc) => {
+    if (module22 && typeof module22 === "object" || typeof module22 === "function") {
+      for (let key of __getOwnPropNames3(module22))
+        if (!__hasOwnProp3.call(target, key) && key !== "default")
+          __defProp3(target, key, {get: () => module22[key], enumerable: !(desc = __getOwnPropDesc3(module22, key)) || desc.enumerable});
+    }
+    return target;
+  };
+  var __toModule3 = (module22) => {
+    return __reExport2(__markAsModule3(__defProp3(module22 != null ? __create3(__getProtoOf3(module22)) : {}, "default", module22 && module22.__esModule && "default" in module22 ? {get: () => module22.default, enumerable: true} : {value: module22, enumerable: true})), module22);
+  };
+  __export3(exports2, {
+    Debug: () => Debug4,
+    default: () => Debug4,
+    getLogs: () => getLogs
+  });
+  var import_debug5 = __toModule3(require_src3());
+  var import_node = __toModule3(require_node5());
+  var cache = [];
+  var MAX_LOGS = 100;
+  function Debug4(namespace) {
+    const debug6 = (0, import_node.default)(namespace, (...args) => {
+      cache.push(args);
+      if (cache.length > MAX_LOGS) {
+        cache.shift();
+      }
+    });
+    return debug6;
+  }
+  Debug4.enable = (namespace) => {
+    import_node.default.enable(namespace);
+  };
+  Debug4.enabled = (namespace) => import_node.default.enabled(namespace);
+  function getLogs(numChars = 7500) {
+    const output = cache.map((c) => c.map((item) => {
+      if (typeof item === "string") {
+        return item;
+      }
+      return JSON.stringify(item);
+    }).join("  ")).join("\n");
+    if (output.length < numChars) {
+      return output;
+    }
+    return output.slice(-numChars);
   }
 });
 
@@ -30313,7 +30744,7 @@ var require_main3 = __commonJS2((exports2, module2) => {
   module2.exports.parse = parse2;
 });
 
-// ../sdk/dist/dotenvExpand.js
+// ../../node_modules/.pnpm/@prisma+sdk@2.29.0/node_modules/@prisma/sdk/dist/dotenvExpand.js
 var require_dotenvExpand = __commonJS2((exports2) => {
   var __defProp3 = Object.defineProperty;
   var __markAsModule3 = (target) => __defProp3(target, "__esModule", {value: true});
@@ -30359,7 +30790,7 @@ var require_dotenvExpand = __commonJS2((exports2) => {
   }
 });
 
-// ../sdk/dist/utils/tryLoadEnvs.js
+// ../../node_modules/.pnpm/@prisma+sdk@2.29.0/node_modules/@prisma/sdk/dist/utils/tryLoadEnvs.js
 var require_tryLoadEnvs = __commonJS2((exports2) => {
   var __create3 = Object.create;
   var __defProp3 = Object.defineProperty;
@@ -30391,7 +30822,7 @@ var require_tryLoadEnvs = __commonJS2((exports2) => {
     tryLoadEnvs: () => tryLoadEnvs3
   });
   var import_chalk7 = __toModule3(require_source2());
-  var import_debug5 = __toModule3(require_dist7());
+  var import_debug5 = __toModule3(require_dist12());
   var import_dotenv = __toModule3(require_main3());
   var import_fs4 = __toModule3(require("fs"));
   var import_path4 = __toModule3(require("path"));
@@ -30488,7 +30919,7 @@ Env vars from ${import_chalk7.default.underline(relativeEnvPath)} overwrite the 
 });
 
 // ../../node_modules/.pnpm/sql-template-tag@4.0.0/node_modules/sql-template-tag/dist/index.js
-var require_dist12 = __commonJS2((exports2) => {
+var require_dist13 = __commonJS2((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
   exports2.sqltag = exports2.empty = exports2.raw = exports2.join = exports2.Sql = void 0;
@@ -30677,7 +31108,7 @@ var require_arg = __commonJS2((exports2, module2) => {
   module2.exports = arg;
 });
 
-// ../sdk/dist/cli/utils.js
+// ../../node_modules/.pnpm/@prisma+sdk@2.29.0/node_modules/@prisma/sdk/dist/cli/utils.js
 var require_utils5 = __commonJS2((exports2) => {
   var __create3 = Object.create;
   var __defProp3 = Object.defineProperty;
@@ -30728,7 +31159,7 @@ var require_utils5 = __commonJS2((exports2) => {
 var require_package2 = __commonJS2((exports2, module2) => {
   module2.exports = {
     name: "@prisma/client",
-    version: "2.29.0",
+    version: "2.29.1",
     description: "Prisma Client is an auto-generated, type-safe and modern JavaScript/TypeScript ORM for Node.js that's tailored to your data. Supports MySQL, PostgreSQL, MariaDB, SQLite databases.",
     keywords: [
       "orm",
@@ -30794,7 +31225,7 @@ var require_package2 = __commonJS2((exports2, module2) => {
       "@prisma/generator-helper": "workspace:*",
       "@prisma/get-platform": "2.29.0-34.1be4cd60b89afa04b192acb1ef47758a39810f3a",
       "@prisma/migrate": "workspace:*",
-      "@prisma/sdk": "workspace:*",
+      "@prisma/sdk": "2.29.0",
       "@timsuchanek/copy": "1.4.5",
       "@types/debug": "4.1.7",
       "@types/jest": "26.0.24",
@@ -35633,7 +36064,7 @@ var import_tryLoadEnvs = __toModule2(require_tryLoadEnvs());
 var import_async_hooks = __toModule2(require("async_hooks"));
 var import_fs2 = __toModule2(require("fs"));
 var import_path2 = __toModule2(require("path"));
-var sqlTemplateTag = __toModule2(require_dist12());
+var sqlTemplateTag = __toModule2(require_dist13());
 
 // src/runtime/getLogLevel.ts
 function getLogLevel(log4) {
@@ -36660,13 +37091,13 @@ function getPrismaClient(config2) {
         action: "executeRaw",
         callsite: this._getCallsite(),
         runInTransaction,
-        transactionId: transactionId != null ? transactionId : void 0
+        transactionId
       });
     }
     $executeRaw(stringOrTemplateStringsArray, ...values) {
-      const doRequest = (runInTransaction = false, transactionId) => {
+      const request = (transactionId, runInTransaction) => {
         try {
-          const promise = this.$executeRawInternal(runInTransaction, transactionId != null ? transactionId : null, stringOrTemplateStringsArray, ...values);
+          const promise = this.$executeRawInternal(runInTransaction != null ? runInTransaction : false, transactionId, stringOrTemplateStringsArray, ...values);
           promise.isExecuteRaw = true;
           return promise;
         } catch (e) {
@@ -36675,17 +37106,17 @@ function getPrismaClient(config2) {
         }
       };
       return {
-        then(onfulfilled, onrejected) {
-          return doRequest().then(onfulfilled, onrejected);
+        then(onFulfilled, onRejected, transactionId) {
+          return request(transactionId).then(onFulfilled, onRejected);
         },
         requestTransaction(transactionId) {
-          return doRequest(true, transactionId);
+          return request(transactionId, true);
         },
-        catch(onrejected) {
-          return doRequest().catch(onrejected);
+        catch(onRejected) {
+          return request().catch(onRejected);
         },
-        finally(onfinally) {
-          return doRequest().finally(onfinally);
+        finally(onFinally) {
+          return request().finally(onFinally);
         }
       };
     }
@@ -36767,13 +37198,13 @@ function getPrismaClient(config2) {
         action: "queryRaw",
         callsite: this._getCallsite(),
         runInTransaction,
-        transactionId: transactionId != null ? transactionId : void 0
+        transactionId
       });
     }
     $queryRaw(stringOrTemplateStringsArray, ...values) {
-      const doRequest = (runInTransaction = false, transactionId) => {
+      const request = (transactionId, runInTransaction) => {
         try {
-          const promise = this.$queryRawInternal(runInTransaction, transactionId != null ? transactionId : null, stringOrTemplateStringsArray, ...values);
+          const promise = this.$queryRawInternal(runInTransaction != null ? runInTransaction : false, transactionId, stringOrTemplateStringsArray, ...values);
           promise.isQueryRaw = true;
           return promise;
         } catch (e) {
@@ -36782,17 +37213,17 @@ function getPrismaClient(config2) {
         }
       };
       return {
-        then(onfulfilled, onrejected) {
-          return doRequest().then(onfulfilled, onrejected);
+        then(onFulfilled, onRejected, transactionId) {
+          return request(transactionId).then(onFulfilled, onRejected);
         },
         requestTransaction(transactionId) {
-          return doRequest(true, transactionId);
+          return request(transactionId, true);
         },
-        catch(onrejected) {
-          return doRequest().catch(onrejected);
+        catch(onRejected) {
+          return request().catch(onRejected);
         },
-        finally(onfinally) {
-          return doRequest().finally(onfinally);
+        finally(onFinally) {
+          return request().finally(onFinally);
         }
       };
     }
@@ -37008,13 +37439,13 @@ new PrismaClient({
       });
     }
     _bootstrapClient() {
-      const clients = this._dmmf.mappings.modelOperations.reduce((acc, mapping) => {
-        const lowerCaseModel = lowerCase(mapping.model);
-        const model = this._dmmf.modelMap[mapping.model];
+      const modelClientBuilders = this._dmmf.mappings.modelOperations.reduce((modelClientBuilders2, modelMapping) => {
+        const lowerCaseModel = lowerCase(modelMapping.model);
+        const model = this._dmmf.modelMap[modelMapping.model];
         if (!model) {
-          throw new Error(`Invalid mapping ${mapping.model}, can't find model`);
+          throw new Error(`Invalid mapping ${modelMapping.model}, can't find model`);
         }
-        const prismaClient = ({
+        const ModelClientBuilder = ({
           operation,
           actionName,
           args,
@@ -37022,53 +37453,42 @@ new PrismaClient({
           modelName,
           unpacker
         }) => {
-          dataPath = dataPath != null ? dataPath : [];
-          const clientMethod = `${lowerCaseModel}.${actionName}`;
           let requestPromise;
           const callsite = this._getCallsite();
-          const requestModelName = modelName != null ? modelName : model.name;
-          const clientImplementation = {
-            then: (onfulfilled, onrejected, transactionId) => {
-              if (!requestPromise) {
-                requestPromise = this._request({
-                  args,
-                  dataPath,
-                  action: actionName,
-                  model: requestModelName,
-                  clientMethod,
-                  callsite,
-                  runInTransaction: false,
-                  transactionId,
-                  unpacker
-                });
-              }
-              return requestPromise.then(onfulfilled, onrejected);
+          const request = (transactionId, runInTransaction) => {
+            requestPromise = requestPromise != null ? requestPromise : this._request({
+              args,
+              model: modelName != null ? modelName : model.name,
+              action: actionName,
+              clientMethod: `${lowerCaseModel}.${actionName}`,
+              dataPath,
+              callsite,
+              runInTransaction: runInTransaction != null ? runInTransaction : false,
+              transactionId,
+              unpacker
+            });
+            return requestPromise;
+          };
+          const modelClient = {
+            then: (onFulfilled, onRejected, transactionId) => {
+              return request(transactionId).then(onFulfilled, onRejected);
             },
             requestTransaction: (transactionId) => {
-              if (!requestPromise) {
-                requestPromise = this._request({
-                  args,
-                  dataPath,
-                  action: actionName,
-                  model: requestModelName,
-                  clientMethod,
-                  callsite,
-                  runInTransaction: true,
-                  transactionId,
-                  unpacker
-                });
-              }
-              return requestPromise;
+              return request(transactionId, true);
             },
-            catch: (onrejected) => requestPromise == null ? void 0 : requestPromise.catch(onrejected),
-            finally: (onfinally) => requestPromise == null ? void 0 : requestPromise.finally(onfinally)
+            catch: (onRejected) => {
+              return request().catch(onRejected);
+            },
+            finally: (onFinally) => {
+              return request().finally(onFinally);
+            }
           };
           for (const field of model.fields.filter((f) => f.kind === "object")) {
-            clientImplementation[field.name] = (fieldArgs) => {
+            modelClient[field.name] = (fieldArgs) => {
               const prefix = dataPath.includes("select") ? "select" : dataPath.includes("include") ? "include" : "select";
               const newDataPath = [...dataPath, prefix, field.name];
               const newArgs = deepSet(args, newDataPath, fieldArgs || true);
-              return clients[field.type]({
+              return modelClientBuilders2[field.type]({
                 operation,
                 actionName,
                 args: newArgs,
@@ -37078,10 +37498,10 @@ new PrismaClient({
               });
             };
           }
-          return clientImplementation;
+          return modelClient;
         };
-        acc[model.name] = prismaClient;
-        return acc;
+        modelClientBuilders2[model.name] = ModelClientBuilder;
+        return modelClientBuilders2;
       }, {});
       for (const mapping of this._dmmf.mappings.modelOperations) {
         const lowerCaseModel = lowerCase(mapping.model);
@@ -37094,9 +37514,10 @@ new PrismaClient({
         const delegate = Object.keys(mapping).reduce((acc, actionName) => {
           if (!filteredActionsList[actionName]) {
             const operation = getOperation(actionName);
-            acc[actionName] = (args) => clients[mapping.model]({
+            acc[actionName] = (args) => modelClientBuilders[mapping.model]({
               operation,
               actionName,
+              dataPath: [],
               args
             });
           }
@@ -37115,7 +37536,7 @@ new PrismaClient({
               return data;
             };
           }
-          return clients[mapping.model]({
+          return modelClientBuilders[mapping.model]({
             operation: "query",
             actionName: `aggregate`,
             args: {
@@ -37156,7 +37577,7 @@ new PrismaClient({
             }
             return acc;
           }, {});
-          return clients[mapping.model]({
+          return modelClientBuilders[mapping.model]({
             operation: "query",
             actionName: "aggregate",
             rootField: mapping.aggregate,
@@ -37205,7 +37626,7 @@ new PrismaClient({
             }
             return acc;
           }, {});
-          return clients[mapping.model]({
+          return modelClientBuilders[mapping.model]({
             operation: "query",
             actionName: "groupBy",
             rootField: mapping.groupBy,
@@ -37255,7 +37676,7 @@ function getOperation(action) {
 }
 
 // src/runtime/index.ts
-var import_sql_template_tag = __toModule2(require_dist12());
+var import_sql_template_tag = __toModule2(require_dist13());
 
 // src/runtime/warnEnvConflicts.ts
 var import_tryLoadEnvs2 = __toModule2(require_tryLoadEnvs());

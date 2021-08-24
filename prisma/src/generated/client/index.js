@@ -25,11 +25,11 @@ const Prisma = {}
 exports.Prisma = Prisma
 
 /**
- * Prisma Client JS version: 2.29.0
+ * Prisma Client JS version: 2.29.1
  * Query Engine version: 1be4cd60b89afa04b192acb1ef47758a39810f3a
  */
 Prisma.prismaVersion = {
-  client: "2.29.0",
+  client: "2.29.1",
   engine: "1be4cd60b89afa04b192acb1ef47758a39810f3a"
 }
 
@@ -120,7 +120,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/media/sriram/projects/sample-projects/express-rest-es2017-boilerplate/prisma/src/generated/client",
+      "value": "/home/sriram/projects/express-boilerplate-sql/prisma/src/generated/client",
       "fromEnvVar": null
     },
     "config": {},
@@ -131,11 +131,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
-    "schemaEnvPath": "../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../..",
-  "clientVersion": "2.29.0",
+  "clientVersion": "2.29.1",
   "engineVersion": "1be4cd60b89afa04b192acb1ef47758a39810f3a",
   "datasourceNames": [
     "db"
