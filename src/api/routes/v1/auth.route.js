@@ -3,7 +3,12 @@ import validate from 'express-validation';
 import controller from '../../controllers/auth.controller';
 import { oAuth as oAuthLogin } from '../../middlewares/auth';
 import {
-  login, register, oAuth, refresh, sendPasswordReset, passwordReset,
+  login,
+  register,
+  oAuth,
+  refresh,
+  sendPasswordReset,
+  passwordReset,
 } from '../../validations/auth.validation';
 
 const router = express.Router();

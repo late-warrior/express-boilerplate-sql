@@ -3,7 +3,10 @@ import validate from 'express-validation';
 import controller from '../../controllers/user.controller';
 import { authorize, ADMIN, LOGGED_USER } from '../../middlewares/auth';
 import {
-  listUsers, createUser, replaceUser, updateUser,
+  listUsers,
+  createUser,
+  replaceUser,
+  updateUser,
 } from '../../validations/user.validation';
 
 const router = express.Router();

@@ -1,5 +1,5 @@
 {
-  "name": "express-rest-boilerplate",
+  "name": "express-ts-rest-boilerplate",
   "version": "1.0.0",
   "description": "Express boilerplate for building RESTful APIs",
   "author": "Sriram",
@@ -10,26 +10,20 @@
     "node": ">=16"
   },
   "scripts": {
-    "precommit": "yarn lint",
-    "prestart": "yarn docs",
     "start": "cross-env NODE_ENV=production pm2 start ./src/index.js",
-    "dev": "nodemon ./src/index.js",
-    "prettier": "prettier --write src/",
-    "lint": "eslint ./src/ --ignore-path .gitignore --ignore-pattern internals/scripts",
-    "lint:fix": "yarn lint --fix",
+    "lint": "eslint ./src/",
     "lint:watch": "yarn lint --watch",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 --exit --recursive src/api/tests",
-    "test:unit": "cross-env NODE_ENV=test mocha src/api/tests/unit",
-    "test:integration": "cross-env NODE_ENV=test mocha --timeout 20000 --exit src/api/tests/integration",
-    "test:watch": "cross-env NODE_ENV=test mocha --watch src/api/tests/unit",
-    "coverage": "nyc report --reporter=text-lcov",
-    "postcoverage": "open-cli coverage/lcov-report/index.html",
-    "validate": "yarn lint && yarn prettier && yarn test",
+    "lint:fix": "yarn lint --fix",
+    "prettier": "prettier --write src/",
+    "precommit": "yarn lint",
+    "dev": "nodemon ./src/index.js",
+    "test": "yarn test:c8",
+    "test:c8": "c8 mocha",
+    "test:watch": "mocha --watch",
+    "test-only": "mocha",
     "docs": "apidoc -i src -o docs",
     "postdocs": "open-cli docs/index.html",
-    "burn-them-all": "rm -rf node_modules yarn.lock && yarn",
-    "test:new1": "mocha",
-    "test:new": "mocha --recursive ./test/*.{js,ts}"
+    "burn-them-all": "rm -rf node_modules yarn.lock && yarn"
   },
   "repository": {
     "type": "git",
@@ -83,7 +77,10 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.7.2",
     "apidoc": "^0.28.1",
+    "c8": "^7.8.0",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "eslint": "^7.29.0",
@@ -94,7 +91,6 @@
     "husky": "^3.0.7",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.1",
-    "nyc": "^15.1.0",
     "opn-cli": "^5.0.0",
     "prettier": "2.3.2",
     "prisma": "^2.29.0",

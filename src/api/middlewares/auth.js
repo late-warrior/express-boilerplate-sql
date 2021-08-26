@@ -52,11 +52,12 @@ function authorize(roles = User.roles) {
     return passport.authenticate(
       'jwt',
       { session: false },
-      handleJWT(req, res, next, roles),
+      handleJWT(req, res, next, roles)
     )(req, res, next);
   }
   return innerAuthFn;
 }
 
 export { ADMIN, LOGGED_USER, authorize };
-export const oAuth = (service) => passport.authenticate(service, { session: false });
+export const oAuth = (service) =>
+  passport.authenticate(service, { session: false });

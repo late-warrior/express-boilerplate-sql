@@ -71,8 +71,10 @@ yarn lint:watch
 ## Test
 
 ```bash
-# run all tests with Mocha
+# run all tests with coverage
 yarn test
+
+Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.com/late-warrior/nodejs-ts-test-setup)
 
 # run unit tests
 yarn test:unit

@@ -1,0 +1,27 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["microsoftSqlServer"]
+  output          = "./prisma/generated/client"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model app_user {
+  id    Int     @id @default(autoincrement())
+  name  String? @db.VarChar(255)
+  email String  @unique @db.VarChar(255)
+  posts post[]
+}
+
+model post {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.DateTime
+  content   String?  @db.Text
+  published Boolean  @default(false)
+  authorId  Int
+  app_user  app_user @relation(fields: [authorId], references: [id])
+}
