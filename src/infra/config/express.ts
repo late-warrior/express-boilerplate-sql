@@ -39,8 +39,8 @@ app.use(cors());
 // app.use(passport.initialize());
 // passport.use('jwt', jwt);
 
-// mount api v1 routes
-app.use('/v1', routes);
+// mount api at root
+app.use('/', routes);
 
 // if error is not an instanceOf APIError, convert it.
 app.use(converter);
