@@ -1,7 +1,7 @@
 import expressValidation from 'express-validation';
 import httpStatus from 'http-status';
-import { env } from '../config/vars';
-import APIError from '../errors/api-error';
+import { APIError } from './api-error';
+import { CONFIG } from './config/vars';
 
 /**
  * Error handler. Send stacktrace only during development
@@ -15,7 +15,7 @@ export const handler = (err, req, res, next) => {
     stack: err.stack,
   };
 
-  if (env !== 'development') {
+  if (CONFIG.env !== 'development') {
     delete response.stack;
   }
 
@@ -31,13 +31,16 @@ export const converter = (err, req, res, next) => {
   let convertedError = err;
 
   if (err instanceof expressValidation.ValidationError) {
+    // @ts-ignore
     convertedError = new APIError({
       message: 'Validation Error',
       errors: err.errors,
       status: err.status,
+      // @ts-ignore
       stack: err.stack,
     });
   } else if (!(err instanceof APIError)) {
+    // @ts-ignore
     convertedError = new APIError({
       message: err.message,
       status: err.status,
@@ -45,7 +48,7 @@ export const converter = (err, req, res, next) => {
     });
   }
 
-  return handler(convertedError, req, res);
+  return handler(convertedError, req, res, next);
 };
 
 /**
@@ -53,9 +56,10 @@ export const converter = (err, req, res, next) => {
  * @public
  */
 export const notFound = (req, res, next) => {
+  // @ts-ignore
   const err = new APIError({
     message: 'Not found',
     status: httpStatus.NOT_FOUND,
   });
-  return handler(err, req, res);
+  return handler(err, req, res, next);
 };

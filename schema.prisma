@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["microsoftSqlServer"]
-  output          = "./prisma/generated/client"
+  //output          = "./prisma/generated/client"
 }
 
 datasource db {

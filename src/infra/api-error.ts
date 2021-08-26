@@ -1,11 +1,9 @@
 import httpStatus from 'http-status';
-import ExtendableError from './extandable-error';
 
 /**
  * Class representing an API error.
- * @extends ExtendableError
  */
-class APIError extends ExtendableError {
+export class APIError {
   /**
    * Creates an API error.
    * @param {string} message - Error message.
@@ -18,15 +16,5 @@ class APIError extends ExtendableError {
     stack,
     status = httpStatus.INTERNAL_SERVER_ERROR,
     isPublic = false,
-  }) {
-    super({
-      message,
-      errors,
-      status,
-      isPublic,
-      stack,
-    });
-  }
+  }) {}
 }
-
-export default APIError;

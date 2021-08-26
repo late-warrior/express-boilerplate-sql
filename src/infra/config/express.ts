@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
 import routes from '../../api/routes';
-import { converter, handler, notFound } from '../middlewares/error';
+import { converter, handler, notFound } from '../error-middleware';
 import { CONFIG } from './vars';
 
 /**

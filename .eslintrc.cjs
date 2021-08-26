@@ -2,6 +2,7 @@ module.exports = {
   rules: {
     'no-console': 0,
     'no-underscore-dangle': 0,
+    'no-comma-dangle': 0,
     'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
     'no-use-before-define': ['error', { variables: false }],
     'no-multi-str': 0,
@@ -14,9 +15,7 @@ module.exports = {
   env: {
     node: true,
   },
-  parserOptions: {
-    ecmaVersion: 8,
-  },
+  parser: '@typescript-eslint/parser',
   extends: ['airbnb-base', 'plugin:unicorn/recommended'],
   ignorePatterns: ['internals/scripts'],
 };

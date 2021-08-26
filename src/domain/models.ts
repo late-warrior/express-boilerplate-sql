@@ -3,7 +3,8 @@
  */
 import { prisma } from '../infra/db';
 
-export class Repository {
+export let repository = null;
+class Repository {
   async findUser(id) {
     const user = await prisma.app_user.findUnique({ where: { id } });
     return User.fromDb(user);
@@ -46,14 +47,18 @@ export class Repository {
   }
 }
 
+if (!repository) {
+  repository = new Repository();
+}
+
 class User {
   constructor(private user) {}
 
   static fromDb(user) {
     return new User(user);
   }
-}
 
-class Post {
-  constructor() {}
+  toObject() {
+    return { ...this.user };
+  }
 }
