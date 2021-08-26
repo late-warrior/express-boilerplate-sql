@@ -1,6 +1,6 @@
-import app from './config/express';
-import logger from './config/logger';
-import { env, port } from './config/vars';
+import app from './infra/config/express';
+import logger from './infra/config/logger';
+import { env, port } from './infra/config/vars';
 
 // CREATE  user icp_read_write with password = 'Icp@read123'
 

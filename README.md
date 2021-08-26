@@ -13,6 +13,7 @@ Modified from the boilerplate [here](https://github.com/danielfsousa/express-res
 - Docker
 - coveralls
 - travis
+- passportjs, user authentication, jwt
 
 **Changed**
 

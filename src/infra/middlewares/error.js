@@ -1,6 +1,6 @@
 import expressValidation from 'express-validation';
 import httpStatus from 'http-status';
-import { env } from '../../config/vars';
+import { env } from '../config/vars';
 import APIError from '../errors/api-error';
 
 /**

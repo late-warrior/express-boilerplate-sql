@@ -1,13 +1,9 @@
+import controller from '@root/src/infra/controllers/user.controller';
 import express from 'express';
 import validate from 'express-validation';
-import controller from '../../controllers/user.controller';
-import { authorize, ADMIN, LOGGED_USER } from '../../middlewares/auth';
-import {
-  listUsers,
-  createUser,
-  replaceUser,
-  updateUser,
-} from '../../validations/user.validation';
+import USER_VALIDATORS from './user.validation';
+
+const { createUser, listUsers, replaceUser, updateUser } = USER_VALIDATORS;
 
 const router = express.Router();
 
@@ -39,7 +35,8 @@ router
    * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
    * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
    */
-  .get(authorize(ADMIN), validate(listUsers), controller.list)
+  // .get(authorize(ADMIN), validate(listUsers), controller.list)
+  .get(validate(listUsers), controller.list)
   /**
    * @api {post} v1/users Create User
    * @apiDescription Create a new user
@@ -65,29 +62,29 @@ router
    * @apiError (Unauthorized 401)  Unauthorized     Only authenticated users can create the data
    * @apiError (Forbidden 403)     Forbidden        Only admins can create the data
    */
-  .post(authorize(ADMIN), validate(createUser), controller.create);
+  // .post(authorize(ADMIN), validate(createUser), controller.create);
+  .post(validate(createUser), controller.create);
 
-router
-  .route('/profile')
-  /**
-   * @api {get} v1/users/profile User Profile
-   * @apiDescription Get logged in user profile information
-   * @apiVersion 1.0.0
-   * @apiName UserProfile
-   * @apiGroup User
-   * @apiPermission user
-   *
-   * @apiHeader {String} Authorization   User's access token
-   *
-   * @apiSuccess {String}  id         User's id
-   * @apiSuccess {String}  name       User's name
-   * @apiSuccess {String}  email      User's email
-   * @apiSuccess {String}  role       User's role
-   * @apiSuccess {Date}    createdAt  Timestamp
-   *
-   * @apiError (Unauthorized 401)  Unauthorized  Only authenticated Users can access the data
-   */
-  .get(authorize(), controller.loggedIn);
+router.route('/profile');
+/**
+ * @api {get} v1/users/profile User Profile
+ * @apiDescription Get logged in user profile information
+ * @apiVersion 1.0.0
+ * @apiName UserProfile
+ * @apiGroup User
+ * @apiPermission user
+ *
+ * @apiHeader {String} Authorization   User's access token
+ *
+ * @apiSuccess {String}  id         User's id
+ * @apiSuccess {String}  name       User's name
+ * @apiSuccess {String}  email      User's email
+ * @apiSuccess {String}  role       User's role
+ * @apiSuccess {Date}    createdAt  Timestamp
+ *
+ * @apiError (Unauthorized 401)  Unauthorized  Only authenticated Users can access the data
+ */
+// .get(authorize(), controller.loggedIn);
 
 router
   .route('/:userId')

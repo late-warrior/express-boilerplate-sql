@@ -5,11 +5,9 @@ import express from 'express';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
-import passport from 'passport';
-import { converter, handler, notFound } from '../api/middlewares/error';
-import routes from '../api/routes/v1';
-import { jwt } from './passport';
-import { logs } from './vars';
+import routes from '../../api/routes';
+import { converter, handler, notFound } from '../middlewares/error';
+import { CONFIG } from './vars';
 
 /**
  * Express instance
@@ -18,7 +16,7 @@ import { logs } from './vars';
 const app = express();
 
 // request logging. dev: console | production: file
-app.use(morgan(logs));
+app.use(morgan(CONFIG.logs));
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
@@ -38,8 +36,8 @@ app.use(helmet());
 app.use(cors());
 
 // enable authentication
-app.use(passport.initialize());
-passport.use('jwt', jwt);
+// app.use(passport.initialize());
+// passport.use('jwt', jwt);
 
 // mount api v1 routes
 app.use('/v1', routes);

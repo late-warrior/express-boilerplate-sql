@@ -1,8 +1,11 @@
+/**
+ * Configure a passport strategy - currently unused
+ */
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import { jwtSecret } from './vars';
+import { CONFIG } from './vars';
 
 const jwtOptions = {
-  secretOrKey: jwtSecret,
+  secretOrKey: CONFIG.jwtSecret,
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
 };
 

@@ -7,7 +7,7 @@ require('dotenv-safe').config({
   allowEmptyValues: true,
 });
 
-export default {
+export const CONFIG = {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
   jwtSecret: process.env.JWT_SECRET,
