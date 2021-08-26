@@ -258,6 +258,18 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@hapi/hoek@^9.0.0":
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.0.tgz#f3933a44e365864f4dad5db94158106d511e8131"
+  integrity sha512-sqKVVVOe5ivCaXDWivIJYVSaEgdQK9ul7a4Kity5Iw7u9+wBAPbX1RMSnLLmp7O4Vzj0WOWwMAJsTL00xwaNug==
+
+"@hapi/topo@^5.0.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@hapi/topo/-/topo-5.1.0.tgz#dc448e332c6c6e37a4dc02fd84ba8d44b9afb012"
+  integrity sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==
+  dependencies:
+    "@hapi/hoek" "^9.0.0"
+
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz#1407967d4c6eecd7388f83acf1eaf4d0c6e58ef9"
@@ -397,6 +409,23 @@
   version "2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb"
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.30.0-28.60b19f4a1de4fe95741da371b4c44a92f4d1adcb.tgz#b4d91ff876662b1de83e0cc913149a1c088becc7"
   integrity sha512-LPKq88lIbYezvX0OOc1PU42hHdTsSMPJWmK8lusaHK7DaLHyXjDp/551LbsVapypbjW6N3Jx/If6GoMDASSMSw==
+
+"@sideway/address@^4.1.0":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.2.tgz#811b84333a335739d3969cfc434736268170cad1"
+  integrity sha512-idTz8ibqWFrPU8kMirL0CoPH/A29XOzzAzpyN3zQ4kAWnzmNfFmRaoMNN6VI8ske5M73HZyhIaW4OuSFIdM4oA==
+  dependencies:
+    "@hapi/hoek" "^9.0.0"
+
+"@sideway/formula@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@sideway/formula/-/formula-3.0.0.tgz#fe158aee32e6bd5de85044be615bc08478a0a13c"
+  integrity sha512-vHe7wZ4NOXVfkoRb8T5otiENVlT7a3IAiw7H5M2+GO+9CDgcVUUsX1zalAztCmwyOr2RUTGJdgB+ZvSVqmdHmg==
+
+"@sideway/pinpoint@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
+  integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -2459,11 +2488,6 @@ helmet@^4.6.0:
   resolved "https://registry.yarnpkg.com/helmet/-/helmet-4.6.0.tgz#579971196ba93c5978eb019e4e8ec0e50076b4df"
   integrity sha512-HVqALKZlR95ROkrnesdhbbZJFi/rIVSoNq6f3jA/9u6MIbTsPh3xZwihjeI5+DO/2sOV6HMHooXcEOuwskHpTg==
 
-hoek@4.x.x:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
-  integrity sha512-QLg82fGkfnJ/4iy1xZ81/9SIJiq1NGFUMGs6ParyjBZr6jW2Ufj/snDqTHixNlHdPNwN2RLVD0Pi3igeK9+JfA==
-
 hosted-git-info@^2.1.4:
   version "2.8.9"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
@@ -2859,11 +2883,6 @@ isarray@~1.0.0:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
 
-isemail@2.x.x:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/isemail/-/isemail-2.2.1.tgz#0353d3d9a62951080c262c2aa0a42b8ea8e9e2a6"
-  integrity sha1-A1PT2aYpUQgMJiwqoKQrjqjp4qY=
-
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
@@ -2891,20 +2910,16 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
-items@2.x.x:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/items/-/items-2.1.2.tgz#0849354595805d586dac98e7e6e85556ea838558"
-  integrity sha512-kezcEqgB97BGeZZYtX/MA8AG410ptURstvnz5RAgyFZ8wQFPMxHY8GpTq+/ZHKT3frSlIthUq7EvLt9xn3TvXg==
-
-joi@^10.4.1:
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-10.6.0.tgz#52587f02d52b8b75cdb0c74f0b164a191a0e1fc2"
-  integrity sha512-hBF3LcqyAid+9X/pwg+eXjD2QBZI5eXnBFJYaAkH4SK3mp9QSRiiQnDYlmlz5pccMvnLcJRS4whhDOTCkmsAdQ==
+joi@^17.4.2:
+  version "17.4.2"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-17.4.2.tgz#02f4eb5cf88e515e614830239379dcbbe28ce7f7"
+  integrity sha512-Lm56PP+n0+Z2A2rfRvsfWVDXGEWjXxatPopkQ8qQ5mxCEhwHG+Ettgg5o98FFaxilOxozoa14cFhrE/hOzh/Nw==
   dependencies:
-    hoek "4.x.x"
-    isemail "2.x.x"
-    items "2.x.x"
-    topo "2.x.x"
+    "@hapi/hoek" "^9.0.0"
+    "@hapi/topo" "^5.0.0"
+    "@sideway/address" "^4.1.0"
+    "@sideway/formula" "^3.0.0"
+    "@sideway/pinpoint" "^2.0.0"
 
 js-git@^0.7.8:
   version "0.7.8"
@@ -5092,13 +5107,6 @@ token-stream@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/token-stream/-/token-stream-1.0.0.tgz#cc200eab2613f4166d27ff9afc7ca56d49df6eb4"
   integrity sha1-zCAOqyYT9BZtJ/+a/HylbUnfbrQ=
-
-topo@2.x.x:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/topo/-/topo-2.0.2.tgz#cd5615752539057c0dc0491a621c3bc6fbe1d182"
-  integrity sha1-zVYVdSU5BXwNwEkaYhw7xvvh0YI=
-  dependencies:
-    hoek "4.x.x"
 
 touch@^3.1.0:
   version "3.1.0"
