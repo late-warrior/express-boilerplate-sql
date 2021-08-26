@@ -7,4 +7,5 @@ dist
 logs
 c8-coverage
 prisma
+docs
 
