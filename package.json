@@ -10,7 +10,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "start": "NODE_ENV=production pm2 start ./src/index.ts",
+    "start": "NODE_ENV=production  yarn compile && pm2 start ecosystem.config.cjs",
     "dev": "nodemon --config nodemon.json src/index.ts",
     "compile": "tsc",
     "lint": "eslint ./src/",

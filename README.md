@@ -13,3 +13,4 @@ Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.
 - Check the places where we have @ts-ignore and fix them
 - Fix all lint issues
 - Check the test setup works
+- Every call is making a call to `/favicon.ico as well - needs to be fixed or served from a static location - right now it errors out

@@ -15,7 +15,7 @@ async function findUser(token) {
 
 async function jwtCb(payload, done) {
   try {
-    const user = await findUser();
+    const user = await findUser('ata');
     if (user) return done(null, user);
     return done(null, false);
   } catch (error) {
