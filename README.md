@@ -10,9 +10,9 @@ This was originally taken from the boilerplate [here](https://github.com/danielf
 
 ## ORM
 
-- For any complex data retrieval logic, it is best to use an ORM. We use [Prisma]() in this project
+- For any complex data retrieval logic, it is best to use an ORM. We use [Prisma](https://www.prisma.io/) in this project
 - See `schema.prisma` for how the database is mapped
--
+- Run `yarn prisma:generate` to re-generate the prisma client based on `schema.prisma`
 
 ## Folder organization
 
