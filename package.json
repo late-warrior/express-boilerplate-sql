@@ -26,6 +26,7 @@
     "postdocs": "open-cli docs/index.html",
     "example-hook": "echo \"Hook comes here\"",
     "burn-them-all": "rm -rf node_modules yarn.lock && yarn",
+    "prisma:generate": "prisma generate",
     "prepare": "husky install"
   },
   "repository": {

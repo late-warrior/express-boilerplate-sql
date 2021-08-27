@@ -8,6 +8,12 @@ This was originally taken from the boilerplate [here](https://github.com/danielf
 - Deployment - `yarn start` - compiles `src` into `dist` and starts `pm2` from there
 - Testing - `yarn test-only` - to run tests without coverage and `yarn test` for running with coverage
 
+## ORM
+
+- For any complex data retrieval logic, it is best to use an ORM. We use [Prisma]() in this project
+- See `schema.prisma` for how the database is mapped
+-
+
 ## Folder organization
 
 - Keeps `src` and `test` separate to enable potentially different compilation setups
