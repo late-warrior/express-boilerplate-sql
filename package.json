@@ -91,7 +91,7 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-unicorn": "^35.0.0",
     "husky": "^7.0.0",
-    "mocha": "^9.1.0",
+    "mocha": "^9.1.1",
     "nodemon": "^2.0.12",
     "opn-cli": "^5.0.0",
     "prettier": "2.3.2",
