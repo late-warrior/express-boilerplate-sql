@@ -10,6 +10,8 @@
       "paths": {
         "@root/*": ["/*"]
       },
+      "esModuleInterop": true,
+      "lib": ["ES2020"],
       "allowSyntheticDefaultImports": true
     },
     "include": ["./src/**/*"]

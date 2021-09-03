@@ -69,4 +69,39 @@ This assumes a pure API project - without having to worry about flows like 'Sign
 - why this domain - prisma examples easy to copy-pasted and start with
 
 - 2 schemas present - postgres and sqlserver
+<<<<<<< HEAD
 >>>>>>> d42c06c (first commit)
+=======
+
+- Download postgres
+- Start psql (sudo -u postgres psql)
+- Create a new role and database
+- CREATE ROLE blog_rw NOSUPERUSER CREATEDB NOCREATEROLE NOINHERIT LOGIN PASSWORD 'password';
+- create database blog_db;
+- psql -U blog_rw -h localhost -d blog_db
+- GRANT ALL PRIVILEGES ON DATABASE blog_db TO blog_rw;
+
+# Getting started
+
+- copy .env.example into .env and modify
+- Follow the [tutorial](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/using-prisma-migrate-typescript-postgres/) to create database tables with Prisma Migrate
+-
+
+```
+Environment variables loaded from .env
+Prisma schema loaded from schema.prisma
+Datasource "db": PostgreSQL database "blog_db", schema "public" at "localhost:5432"
+
+The following migration(s) have been created and applied from new schema changes:
+
+migrations/
+  └─ 20210903123817_init/
+    └─ migration.sql
+
+Your database is now in sync with your schema.
+
+✔ Generated Prisma Client (2.30.0) to ./node_modules/@prisma/client in 289ms
+```
+
+-
+>>>>>>> 15063dc (migrations files)
