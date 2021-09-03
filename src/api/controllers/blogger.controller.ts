@@ -1,14 +1,14 @@
-import { repository } from '../../domain/models';
+import { Blogger } from '../../domain/models';
 
 /**
  * Load user and append to request locals.  This method is called whenever
  * a user id needs to be loaded
  * @public
  */
-export const load = async (req, res, next, id) => {
+export async function loadBlogger (req, res, next, id) {
   try {
-    const user = await repository.findUser(id);
-    req.locals = { user };
+    const blogger = await Blogger.findOne(parseInt(id));
+    req.locals = { blogger };
     return next();
   } catch (error) {
     return next(error);
@@ -19,7 +19,9 @@ export const load = async (req, res, next, id) => {
  * Get user
  * @public
  */
-export const get = (req, res) => res.json(req.locals.user.toObject());
+export async function getBlogger(req, res, next) {
+    res.json(req.locals.user);
+}
 
 // /**
 //  * Get logged in user info

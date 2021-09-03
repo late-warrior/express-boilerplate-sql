@@ -2,7 +2,7 @@
  * Consolidates all the routes in the application
  */
 import express from 'express';
-import userRoutes from './user.route';
+import userRoutes from './blogger.route';
 
 const router = express.Router();
 

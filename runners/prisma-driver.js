@@ -1,15 +1,16 @@
 import Prisma from '@prisma/client';
 
-const { PrismaClient } = Prisma;
+const { PrismaClient, Role } = Prisma;
 
 const prisma = new PrismaClient()
 
 async function main() {
-    let allUsers = await queryUsers();
-    console.log(allUsers)
-    await createUser();
-    allUsers = await queryUsers();
-    console.log(allUsers)
+    // let allUsers = await queryUsers();
+    // console.log(allUsers)
+    // await createUser();
+    // allUsers = await queryUsers();
+    // console.log(allUsers)
+    console.log(Role);
 }
 
 async function queryUsers() {

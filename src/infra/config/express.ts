@@ -5,8 +5,12 @@ import express from 'express';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
+import favicon from 'serve-favicon';
+import path from 'path';
+import {jwtStrategy} from '../auth-middleware';
+import passport from 'passport';
 import routes from '../../api/routes';
-import { converter, handler, notFound } from '../error-middleware';
+// import { converter, handler, notFound } from '../error-middleware';
 import { CONFIG } from './vars';
 
 /**
@@ -15,10 +19,12 @@ import { CONFIG } from './vars';
  */
 const app = express();
 
+app.use(favicon(path.resolve('public', 'favicon.ico')));
+
 // request logging. dev: console | production: file
 app.use(morgan(CONFIG.logs));
 
-// parse body params and attache them to req.body
+// parse body params and attach them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -36,19 +42,19 @@ app.use(helmet());
 app.use(cors());
 
 // enable authentication
-// app.use(passport.initialize());
-// passport.use('jwt', jwt);
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy);
 
 // mount api at root
 app.use('/', routes);
 
-// if error is not an instanceOf APIError, convert it.
-app.use(converter);
+// // if error is not an instanceOf APIError, convert it.
+// app.use(converter);
 
-// catch 404 and forward to error handler
-app.use(notFound);
+// // catch 404 and forward to error handler
+// app.use(notFound);
 
-// error handler, send stacktrace only during development
-app.use(handler);
+// // error handler, send stacktrace only during development
+// app.use(handler);
 
 export default app;
