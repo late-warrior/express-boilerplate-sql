@@ -1,0 +1,10 @@
+node_modules
+# Keep environment variables out of version control
+.env
+combined.log
+error.log
+dist
+logs
+c8-coverage
+prisma
+docs

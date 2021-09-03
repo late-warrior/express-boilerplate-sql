@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "module": "ES2020" ,
+      "target": "ES2020",
+      "outDir": "./dist",
+      "moduleResolution": "Node",
+      "allowJs": true,
+      "sourceMap": true,
+      "paths": {
+        "@root/*": ["/*"]
+      },
+      "allowSyntheticDefaultImports": true
+    },
+    "include": ["./src/**/*"]
+}
