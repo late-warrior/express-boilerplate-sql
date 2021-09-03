@@ -22,3 +22,6 @@ export class APIError extends Error {
     }
   }
 }
+
+const n = new APIError();
+console.log(n.toJson());

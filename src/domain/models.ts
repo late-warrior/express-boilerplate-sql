@@ -1,64 +1,22 @@
 /**
- * Models that are central to our application and follow the DDD pattern.
- */
-import { prisma } from '../infra/db';
+* Domain driven design - keep the domain in the centre of all interactions.
+*/
+import {bloggerRepository} from './repository';
+import logger from '../infra/config/logger';
 
-export let repository = null;
-class Repository {
-  async findUser(id) {
-    const user = await prisma.app_user.findUnique({ where: { id } });
-    return User.fromDb(user);
-  }
+export class Blogger {
+    constructor(public user) {
+        this.user = user;
+    }
 
-  async storeUser(id, user) {
-    const storedUser = await prisma.app_user.upsert({
-      where: { id },
-      update: { ...user },
-      create: { ...user },
-    });
-    return User.fromDb(storedUser);
-  }
+    static async findOne(id) {
+        const user = await bloggerRepository.findUser(id);
+        logger.log('user here is', user);
+        return new Blogger(user);
+    }
 
-  async removeUser(id) {
-    const deleteUser = await prisma.app_user.delete({
-      where: {
-        id,
-      },
-    });
-  }
-
-  async storeUserWithPosts() {
-    const createdUser = await prisma.app_user.create({
-      data: {
-        name: 'Alice',
-        email: 'alice@prisma.io',
-        posts: {
-          create: [
-            { title: 'My first day at Prisma' },
-            {
-              title: 'How to create an Microsoft SQL Server database',
-              content: 'A tutorial in progress!',
-            },
-          ],
-        },
-      },
-    });
-    return User.fromDb(createdUser);
-  }
-}
-
-if (!repository) {
-  repository = new Repository();
-}
-
-class User {
-  constructor(private user) {}
-
-  static fromDb(user) {
-    return new User(user);
-  }
-
-  toObject() {
-    return { ...this.user };
-  }
+    businessLogic() {
+        // Some complex computation involving this.user
+        return this.user;
+    }
 }

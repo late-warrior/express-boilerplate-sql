@@ -1,7 +1,8 @@
 /**
- * Configure a passport strategy - currently unused
+ * Configure passport strategies for authorization
  */
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import {findUser} from '../controllers/user.controller';
 import { CONFIG } from './vars';
 
 const jwtOptions = {
@@ -9,13 +10,9 @@ const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
 };
 
-async function findUser(token) {
-  return { name: 'hardcoded', id: 123 };
-}
-
 async function jwtCb(payload, done) {
   try {
-    const user = await findUser('ata');
+    const user = await findUser(payload.sub);
     if (user) return done(null, user);
     return done(null, false);
   } catch (error) {
