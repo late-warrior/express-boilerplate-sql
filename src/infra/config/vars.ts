@@ -16,6 +16,7 @@ export const CONFIG = {
   port: process.env.PORT,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpirationInterval: process.env.JWT_EXPIRATION_MINUTES,
+  kafkaBrokers: process.env.KAFKA_BROKERS.split(','),
   sqlServer: {},
   logs: process.env.NODE_ENV === 'production' ? 'combined' : 'dev',
   emailConfig: {
