@@ -24,6 +24,13 @@ This was originally taken from the boilerplate [here](https://github.com/danielf
 
 Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.com/late-warrior/nodejs-ts-test-setup)
 
+<<<<<<< HEAD
+=======
+## Authentication
+
+- Supports JWT
+
+>>>>>>> d42c06c (first commit)
 ## TODOs
 
 - This is barely working at this point - need to enable all CRUD operations
@@ -32,3 +39,34 @@ Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.
 - Fix all lint issues
 - Every call is making a call to `/favicon.ico as well - needs to be fixed or served from a static location - right now it errors out
 - Explore and change out apidoc to swagger (openapi) if that is easy
+<<<<<<< HEAD
+=======
+
+## Configuration files
+
+- `.husky` - pre-commit hooks
+- `c8-coverage` - coverage information
+- `dist` - javascript files compiled from typescript in `src`
+- `docs` - generated API docs
+- `runners` - useful scripts for running isolated functionality
+- `.c8rc.json` - c8 configuration file
+- `eslintrc.cjs` - eslint configuration
+- `.mocharc.cjs` - mocha configuration
+- `.prettierrc.json` - prettier configuration
+- `.prettierignore` - files to ignore for prettier
+- `nodemon.json` - nodemon configuration
+- `schema.prisma` - prisma schema
+
+## Assumptions
+
+This assumes a pure API project - without having to worry about flows like 'Sign-up mail' or 'Sign in'
+
+## Domain
+
+- app_user - roles - customer, admin
+- routes - authorized, unauth, admin-only
+- blog application - author, blog, posts, comments etc
+- why this domain - prisma examples easy to copy-pasted and start with
+
+- 2 schemas present - postgres and sqlserver
+>>>>>>> d42c06c (first commit)

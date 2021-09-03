@@ -1,18 +1,35 @@
 generator client {
+<<<<<<< HEAD
   provider        = "prisma-client-js"
   previewFeatures = ["microsoftSqlServer"]
 }
 
 datasource db {
   provider = "sqlserver"
+=======
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+>>>>>>> d42c06c (first commit)
   url      = env("DATABASE_URL")
 }
 
 model app_user {
+<<<<<<< HEAD
   id    Int     @id @default(autoincrement())
   name  String? @db.VarChar(255)
   email String  @unique @db.VarChar(255)
   posts post[]
+=======
+  id       Int     @id @default(autoincrement())
+  name     String? @db.VarChar(255)
+  email    String  @unique @db.VarChar(255)
+  password String
+  posts    post[]
+>>>>>>> d42c06c (first commit)
 }
 
 model post {
@@ -24,3 +41,11 @@ model post {
   authorId  Int
   app_user  app_user @relation(fields: [authorId], references: [id])
 }
+<<<<<<< HEAD
+=======
+
+enum Role {
+  USER
+  ADMIN
+}
+>>>>>>> d42c06c (first commit)

@@ -7,12 +7,20 @@ import userRoutes from './user.route';
 const router = express.Router();
 
 /**
+<<<<<<< HEAD
  * GET v1/status
+=======
+ * GET /status
+>>>>>>> d42c06c (first commit)
  */
 router.get('/status', (req, res) => res.send('OK'));
 
 /**
+<<<<<<< HEAD
  * GET v1/docs
+=======
+ * GET /docs
+>>>>>>> d42c06c (first commit)
  */
 router.use('/docs', express.static('docs'));
 

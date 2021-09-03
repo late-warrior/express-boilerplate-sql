@@ -6,4 +6,9 @@ error.log
 dist
 logs
 c8-coverage
+<<<<<<< HEAD
 prisma
+=======
+prisma
+docs
+>>>>>>> d42c06c (first commit)

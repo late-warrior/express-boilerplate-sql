@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "express-ts-rest-boilerplate",
+=======
+  "name": "express-ts-rest-minimal-boilerplate",
+>>>>>>> d42c06c (first commit)
   "version": "1.0.0",
   "description": "Express boilerplate for building RESTful APIs",
   "author": "Sriram",
