@@ -95,7 +95,7 @@
     "nodemon": "^2.0.12",
     "opn-cli": "^5.0.0",
     "prettier": "2.3.2",
-    "prisma": "^2.30.0",
+    "prisma": "^2.30.3",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
     "supertest": "^6.1.6",
