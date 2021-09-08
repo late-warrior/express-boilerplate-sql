@@ -11,6 +11,7 @@ import {jwtStrategy} from '../auth-middleware';
 import passport from 'passport';
 import routes from '../../api/routes';
 // import { converter, handler, notFound } from '../error-middleware';
+import {errorHandler, notFound} from '../error-middleware';
 import { CONFIG } from './vars';
 
 /**
@@ -52,9 +53,10 @@ app.use('/', routes);
 // app.use(converter);
 
 // // catch 404 and forward to error handler
-// app.use(notFound);
+//app.use(notFound);
 
 // // error handler, send stacktrace only during development
 // app.use(handler);
+app.use(errorHandler);
 
 export default app;

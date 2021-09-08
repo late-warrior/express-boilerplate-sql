@@ -20,6 +20,7 @@ export async function loadBlogger (req, res, next, id) {
  * @public
  */
 export async function getBlogger(req, res, next) {
+    //await Blogger.findOne(parseInt(id));
     res.json(req.locals.user);
 }
 
