@@ -6,6 +6,8 @@ const { PrismaClient, Role } = Prisma;
 // console.log(pr);
 
 export const prisma = new PrismaClient();
+
+// Export prisma models as types for use in the application
 export const UserRole = Role;
 
 prisma.$on('beforeExit', async () => {

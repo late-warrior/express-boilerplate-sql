@@ -110,3 +110,16 @@ const headers = {Authorization: `Bearer ${token}`}
 const resp = await fetch(url, {headers})
 await resp.json()
 ```
+
+- Right now demonstrates two routes -
+
+* Authenticated blogger route
+* Unauthenticated route
+* Authenticated admin route
+
+* TODO - a route to issue JWT tokens
+
+To Fix -
+
+- openapi
+- add test
