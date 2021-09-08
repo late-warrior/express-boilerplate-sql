@@ -5,13 +5,13 @@ import express from 'express';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
-import favicon from 'serve-favicon';
-import path from 'path';
-import {jwtStrategy} from '../auth-middleware';
 import passport from 'passport';
+import path from 'path';
+import favicon from 'serve-favicon';
 import routes from '../../api/routes';
+import { getJWTStrategy } from '../auth-middleware';
 // import { converter, handler, notFound } from '../error-middleware';
-import {errorHandler, notFound} from '../error-middleware';
+import { errorHandler } from '../error-middleware';
 import { CONFIG } from './vars';
 
 /**
@@ -44,7 +44,7 @@ app.use(cors());
 
 // enable authentication
 app.use(passport.initialize());
-passport.use('jwt', jwtStrategy);
+passport.use('jwt', getJWTStrategy());
 
 // mount api at root
 app.use('/', routes);

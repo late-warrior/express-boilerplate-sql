@@ -1,73 +1,107 @@
 /**
- * Configure passport strategies for authorization
+ * Configure passport strategies for authorization.  Here we use JWT
  */
 
-import httpStatus from 'http-status';
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import {UserRole} from './db';
-import {findUser} from '../api/controllers/user.controller';
 import { CONFIG } from './config/vars';
 
-const jwtOptions = {
-  secretOrKey: CONFIG.jwtSecret,
-  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
-};
+export function getJWTStrategy() {
+  const jwtOptions = {
+    secretOrKey: CONFIG.jwtSecret,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+  };
 
-async function jwtCb(payload, done) {
-  try {
-    const user = await findUser(payload.sub);
-    if (user) return done(null, user);
-    return done(null, false);
-  } catch (error) {
-    return done(error, false);
+  /**
+   * Callback function after the JWT token is decoded
+   * @param payload Of the form {sub, name, iat}
+   * @param done callback
+   * @returns
+   */
+  async function jwtCb(payload, done) {
+    try {
+      // const user = await findUser(payload.sub);
+      const user = { name: 'hardcoded-name', roles: ['ADMIN'] };
+      if (user) return done(null, user);
+      return done(null, false);
+    } catch (error) {
+      return done(error, false);
+    }
   }
+
+  const jwtStrategy = new JwtStrategy(jwtOptions, jwtCb);
+  return jwtStrategy;
 }
 
-export const jwtStrategy = new JwtStrategy(jwtOptions, jwtCb);
+function checkRoleAccess(allowedRoles, userRoles) {
+  for (const role of allowedRoles) {
+    if (userRoles.includes(role)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 /**
-* Callback function called after JWT validation by passport
+ * Callback function called after JWT validation by passport
  */
 function postJWTAuthorization(req, res, next, roles) {
+  /**
+   * For authorization
+   * @param err Error is called if there is an issue with retrieving user information
+   * from the application
+   * @param user
+   * @param info Authorization related failures - underlying libary
+   * seems to be returning Error or JSONWebTokenError objects, so we cannot
+   * reliably figure out which.  Let us pick up info.message if present or
+   * use a generic message
+   * @returns
+   */
   async function innFn(err, user, info) {
-    console.log('is this called  adfsd?');
-    console.log(err);
-    console.log(info);
+    const error = {};
+    const isError = err || info || !user;
+    if (isError) {
+      error['cause'] = 'Authorization Issue';
+      if (info) {
+        error['underlyingCause'] = info.message ?? 'jwt-auth failure';
+      } else if (err) {
+        error['underlyingCause'] = err.message ?? 'jwt-auth failure';
+      }
+      next(new Error('auth'));
+      return;
+    }
     // This middleware will be called after passport.authenticate, so req.login will
     // be available to start a session
-      try {
-        if (err || !user) throw err;
-        // TODO: Understand what this does
-        await req.logIn(user, { session: false });
-        console.log('user here is', req.user);
-      } catch (e) {
-        console.log('error caught here');
-         next(err);
-         return;
-      }
-      checkRoleAccess(roles, user.role);
-      req.user = user;
-      next();
+    try {
+      // req.login ends up setting req.user = user
+      await req.logIn(user, { session: false });
+    } catch (er) {
+      next(er);
+      return;
+    }
+    if (!checkRoleAccess(roles, user.roles)) {
+      next(new Error('This role cannot access'));
+      return;
+    }
+    next();
   }
   return innFn;
 }
 
-function checkRoleAccess(allowedRoles, userRole) {
-  // if (UserRole[userRole])
-  console.log(allowedRoles);
-  console.log(userRole);
-  return true;
-}
-
 /**
-* Authorization factory function that returns another function to help authorize
-* using the configured jwt strategy
+ * Authorization factory function that returns another function to help authorize
+ * using the configured jwt strategy
  */
 export function authorize(roles) {
+  if (!Array.isArray(roles)) {
+    roles = [roles];
+  }
   function authedFn(req, res, next) {
-    console.log('is this called ?');
-    return passport.authenticate('jwt', {session: false}, postJWTAuthorization(req, res, next, roles))(req, res, next);
+    return passport.authenticate(
+      'jwt',
+      { session: false },
+      postJWTAuthorization(req, res, next, roles)
+    )(req, res, next);
   }
   return authedFn;
 }

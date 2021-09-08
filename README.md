@@ -96,3 +96,17 @@ Your database is now in sync with your schema.
 ```
 
 -
+
+### Debugging
+
+- Run `yarn debug:dev` - this runs the development instance without nodemon and so is easier to debug
+
+### Use jwt.io to generate sample jwt tokens
+
+```
+const url = 'http://localhost:3000/users/auth/status/1';
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.s1tM2n8aCq2lg7uUYKVB6ff7nnJewtGHhEM40ObQBF8';
+const headers = {Authorization: `Bearer ${token}`}
+const resp = await fetch(url, {headers})
+await resp.json()
+```

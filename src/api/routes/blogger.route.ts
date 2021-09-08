@@ -1,8 +1,7 @@
 import express from 'express';
-import validate from 'express-validation';
-import { loadBlogger, getBlogger } from '../controllers/blogger.controller';
-import {authorize} from '../../infra/auth-middleware';
-import {UserRole} from '../../infra/db';
+import { authorize } from '../../infra/auth-middleware';
+import { UserRole } from '../../infra/db';
+import { getBlogger, loadBlogger } from '../controllers/blogger.controller';
 import USER_VALIDATORS from './user.validation';
 
 const { createUser, listUsers, replaceUser, updateUser } = USER_VALIDATORS;
@@ -14,7 +13,9 @@ const router = express.Router();
  */
 router.param('userId', loadBlogger);
 router.route('/:userId').get(getBlogger);
-router.route('/auth/status/:userId').get(authorize(UserRole.BLOGGER), getBlogger);
+router
+  .route('/auth/status/:userId')
+  .get(authorize([UserRole.BLOGGER, UserRole.ADMIN]), getBlogger);
 
 // router
 //   .route('/')

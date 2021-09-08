@@ -5,7 +5,7 @@ import { Blogger } from '../../domain/models';
  * a user id needs to be loaded
  * @public
  */
-export async function loadBlogger (req, res, next, id) {
+export async function loadBlogger(req, res, next, id) {
   try {
     const blogger = await Blogger.findOne(parseInt(id));
     req.locals = { blogger };
@@ -13,15 +13,15 @@ export async function loadBlogger (req, res, next, id) {
   } catch (error) {
     return next(error);
   }
-};
+}
 
 /**
  * Get user
  * @public
  */
 export async function getBlogger(req, res, next) {
-    //await Blogger.findOne(parseInt(id));
-    res.json(req.locals.user);
+  //await Blogger.findOne(parseInt(id));
+  res.json(req.user);
 }
 
 // /**
