@@ -67,7 +67,6 @@ Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.
 - Fix all lint issues
 - Explore and change out apidoc to swagger (openapi) if that is easy
 - Add back integration tests for the API
-- Standard schema for API responses - usually when there is an error
 - Validation for all payload inputs
 
 ## Domain

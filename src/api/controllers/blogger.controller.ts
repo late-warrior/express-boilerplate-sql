@@ -1,27 +1,12 @@
 import { Blogger } from '../../domain/models';
 
 /**
- * Load user and append to request locals.  This method is called whenever
- * a user id needs to be loaded
- * @public
- */
-export async function loadBlogger(req, res, next, id) {
-  try {
-    const blogger = await Blogger.findOne(parseInt(id));
-    req.locals = { blogger };
-    return next();
-  } catch (error) {
-    return next(error);
-  }
-}
-
-/**
  * Get user
  * @public
  */
 export async function getBlogger(req, res, next) {
-  //await Blogger.findOne(parseInt(id));
-  res.json(req.user);
+  const blogger = await Blogger.findOne(Number.parseInt(req.params.userId, 10));
+  res.json(blogger);
 }
 
 // /**

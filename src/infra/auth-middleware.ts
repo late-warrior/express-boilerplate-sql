@@ -5,6 +5,7 @@
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import { Blogger } from '../domain/models';
 import { APIError } from './api-error';
 import { CONFIG } from './config/vars';
 
@@ -38,8 +39,8 @@ export function getJWTStrategy() {
    */
   async function jwtCb(payload, done) {
     try {
-      // const user = await findUser(payload.sub);
-      const user = { name: 'hardcoded-name', roles: ['ADMIN'] };
+      const user = await Blogger.findOne(payload.sub);
+      // const user = { name: 'hardcoded-name', roles: ['ADMIN'] };
       if (user) return done(null, user);
       return done(null, false);
     } catch (error) {

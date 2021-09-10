@@ -1,17 +1,13 @@
 import express from 'express';
 import { authorize } from '../../infra/auth-middleware';
 import { UserRole } from '../../infra/db';
-import { getBlogger, loadBlogger } from '../controllers/blogger.controller';
+import { getBlogger } from '../controllers/blogger.controller';
 import USER_VALIDATORS from './user.validation';
 
 const { createUser, listUsers, replaceUser, updateUser } = USER_VALIDATORS;
 
 const router = express.Router();
 
-/**
- * Load user when API with userId route parameter is hit
- */
-router.param('userId', loadBlogger);
 router.route('/:userId').get(getBlogger);
 router
   .route('/auth/status/:userId')

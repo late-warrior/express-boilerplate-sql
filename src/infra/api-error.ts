@@ -1,7 +1,5 @@
 import h from 'http-status';
-import jwt from 'jsonwebtoken';
 
-const { JSONWebTokenError } = jwt;
 /**
  * Class to encapsulate all error-handling codes within the application
  */
