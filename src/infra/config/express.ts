@@ -10,8 +10,7 @@ import path from 'path';
 import favicon from 'serve-favicon';
 import routes from '../../api/routes';
 import { getJWTStrategy } from '../auth-middleware';
-// import { converter, handler, notFound } from '../error-middleware';
-import { errorHandler } from '../error-middleware';
+import { errorHandler, notFoundHandler } from '../error-middleware';
 import { CONFIG } from './vars';
 
 /**
@@ -49,14 +48,9 @@ passport.use('jwt', getJWTStrategy());
 // mount api at root
 app.use('/', routes);
 
-// // if error is not an instanceOf APIError, convert it.
-// app.use(converter);
+// catch 404 and forward to error handler
+app.use(notFoundHandler);
 
-// // catch 404 and forward to error handler
-//app.use(notFound);
-
-// // error handler, send stacktrace only during development
-// app.use(handler);
 app.use(errorHandler);
 
 export default app;

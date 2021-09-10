@@ -1,16 +1,19 @@
 import { APIError } from './api-error';
 
 /**
- * Catch 404 and forward to error handler
- * @public
+ * 404 handler for the app
+ * @param req
+ * @param res
+ * @param next
  */
-export const notFound = (req, res, next) => {
-  res.status(404);
-  res.json({ message: 'not found', code: 404 });
-};
+export function notFoundHandler(req, res, next) {
+  const error = new APIError(404, { message: 'Route not found' });
+  res.status(error.httpStatusCode);
+  res.json(error.toJSON());
+}
 
 export function errorHandler(err, req, res, next) {
   const error = APIError.fromError(err);
   res.status(error.httpStatusCode);
-  res.json(err.toJSON());
+  res.json(error.toJSON());
 }
