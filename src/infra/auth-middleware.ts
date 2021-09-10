@@ -2,9 +2,27 @@
  * Configure passport strategies for authorization.  Here we use JWT
  */
 
+import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import { APIError } from './api-error';
 import { CONFIG } from './config/vars';
+
+export function sign(subject: string): string {
+  const secret = 'adfa';
+  const token = jwt.sign({}, secret, {
+    expiresIn: '1d',
+    subject,
+    issuer: 'my-app',
+  });
+  return token;
+}
+
+export function verifyCredential(userName, password) {
+  // Verify
+  // Passwords are stored in encrypted fashion in the database
+  return 'token';
+}
 
 export function getJWTStrategy() {
   const jwtOptions = {
@@ -43,14 +61,14 @@ function checkRoleAccess(allowedRoles, userRoles) {
 }
 
 /**
- * Callback function called after JWT validation by passport
+ * Sets up a callback function that is called after jwt verification
  */
 function postJWTAuthorization(req, res, next, roles) {
   /**
-   * For authorization
+   * Callback that is called after jwt verification (either successful or failure)
    * @param err Error is called if there is an issue with retrieving user information
    * from the application
-   * @param user
+   * @param user User object
    * @param info Authorization related failures - underlying libary
    * seems to be returning Error or JSONWebTokenError objects, so we cannot
    * reliably figure out which.  Let us pick up info.message if present or
@@ -58,16 +76,10 @@ function postJWTAuthorization(req, res, next, roles) {
    * @returns
    */
   async function innFn(err, user, info) {
-    const error = {};
     const isError = err || info || !user;
     if (isError) {
-      error['cause'] = 'Authorization Issue';
-      if (info) {
-        error['underlyingCause'] = info.message ?? 'jwt-auth failure';
-      } else if (err) {
-        error['underlyingCause'] = err.message ?? 'jwt-auth failure';
-      }
-      next(new Error('auth'));
+      const apiError = APIError.fromAuthFailure(info, err);
+      next(apiError);
       return;
     }
     // This middleware will be called after passport.authenticate, so req.login will
@@ -80,7 +92,11 @@ function postJWTAuthorization(req, res, next, roles) {
       return;
     }
     if (!checkRoleAccess(roles, user.roles)) {
-      next(new Error('This role cannot access'));
+      next(
+        new APIError(403, {
+          message: `This user does not have the required role access for this route`,
+        })
+      );
       return;
     }
     next();

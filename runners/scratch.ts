@@ -1,27 +1,14 @@
-import httpStatus from 'http-status';
+import jwt from 'jsonwebtoken';
 
-const AppErrorStatus = {
-  IncorrectRole: 0,
-} as const;
-
-/**
- * Class representing an API error.
- */
-export class APIError extends Error {
-  /**
-   * Creates an API error.
-   */
-  constructor(public message:String, public errorStatus: AppErrorStatus, status=httpStatus.INTERNAL_SERVER_ERROR, stack: String?) {}
-
-  toJson() {
-    return {
-      message: this.message,
-      errorStatus: this.errorStatus,
-      status: this.status,
-      stack: this.stack
-    }
-  }
+export function sign(subject) {
+  const secret = 'adfa-adfad-adfasd-adfas';
+  const token = jwt.sign({}, secret, {
+    expiresIn: '1d',
+    subject,
+    issuer: 'my-app',
+  });
+  return token;
 }
 
-const n = new APIError();
-console.log(n.toJson());
+const token = sign('adf');
+console.log(token);
