@@ -2,12 +2,30 @@
  * Configure passport strategies for authorization.  Here we use JWT
  */
 
+import { Blogger } from '@src/domain/models';
+import express from 'express';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import { Blogger } from '../domain/models';
 import { APIError } from './api-error';
 import { CONFIG } from './config/vars';
+
+/**
+ * Callback function after the JWT token is decoded
+ * @param payload Of the form {sub, name, iat}
+ * @param done callback
+ * @returns
+ */
+async function jwtCb(payload, done) {
+  try {
+    const user = await Blogger.findOne(payload.sub);
+    // const user = { name: 'hardcoded-name', roles: ['ADMIN'] };
+    if (user) return done(null, user);
+    return done(null, false);
+  } catch (error) {
+    return done(error, false);
+  }
+}
 
 export function sign(subject: string): string {
   const secret = 'adfa';
@@ -19,46 +37,24 @@ export function sign(subject: string): string {
   return token;
 }
 
-export function verifyCredential(userName, password) {
-  // Verify
-  // Passwords are stored in encrypted fashion in the database
-  return 'token';
-}
+// export function verifyCredential(userName, password) {
+//   // Verify
+//   // Passwords are stored in encrypted fashion in the database
+//   return 'token';
+// }
 
-export function getJWTStrategy() {
+export function getJWTStrategy(): passport.Strategy {
   const jwtOptions = {
     secretOrKey: CONFIG.jwtSecret,
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
   };
-
-  /**
-   * Callback function after the JWT token is decoded
-   * @param payload Of the form {sub, name, iat}
-   * @param done callback
-   * @returns
-   */
-  async function jwtCb(payload, done) {
-    try {
-      const user = await Blogger.findOne(payload.sub);
-      // const user = { name: 'hardcoded-name', roles: ['ADMIN'] };
-      if (user) return done(null, user);
-      return done(null, false);
-    } catch (error) {
-      return done(error, false);
-    }
-  }
 
   const jwtStrategy = new JwtStrategy(jwtOptions, jwtCb);
   return jwtStrategy;
 }
 
 function checkRoleAccess(allowedRoles, userRoles) {
-  for (const role of allowedRoles) {
-    if (userRoles.includes(role)) {
-      return true;
-    }
-  }
-  return false;
+  return allowedRoles.some((item) => userRoles.includes(item));
 }
 
 /**
@@ -88,8 +84,8 @@ function postJWTAuthorization(req, res, next, roles) {
     try {
       // req.login ends up setting req.user = user
       await req.logIn(user, { session: false });
-    } catch (er) {
-      next(er);
+    } catch (error) {
+      next(error);
       return;
     }
     if (!checkRoleAccess(roles, user.roles)) {
@@ -109,15 +105,16 @@ function postJWTAuthorization(req, res, next, roles) {
  * Authorization factory function that returns another function to help authorize
  * using the configured jwt strategy
  */
-export function authorize(roles) {
+export function authorize(roles: Array<string>): express.RequestHandler {
+  let routeRoles = roles;
   if (!Array.isArray(roles)) {
-    roles = [roles];
+    routeRoles = [roles];
   }
   function authedFn(req, res, next) {
     return passport.authenticate(
       'jwt',
       { session: false },
-      postJWTAuthorization(req, res, next, roles)
+      postJWTAuthorization(req, res, next, routeRoles)
     )(req, res, next);
   }
   return authedFn;

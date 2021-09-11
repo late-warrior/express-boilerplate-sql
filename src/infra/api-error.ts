@@ -1,5 +1,17 @@
 import h from 'http-status';
 
+interface APIErrorOptions {
+  jsonWebTokenError?: Error;
+  message?: string;
+}
+
+interface APIErrorJSON {
+  message: string;
+  httpStatus: string;
+  httpStatusCode: number;
+  httpStatusMessage: string;
+}
+
 /**
  * Class to encapsulate all error-handling codes within the application
  */
@@ -12,7 +24,7 @@ export class APIError extends Error {
 
   constructor(
     public httpStatusCode = 400,
-    { jsonWebTokenError = null, message = null }
+    { jsonWebTokenError = null, message = null }: APIErrorOptions
   ) {
     super();
     this.name = this.constructor.name;
@@ -28,7 +40,7 @@ export class APIError extends Error {
   /**
    * Provide a serialiazable version of the error
    */
-  toJSON() {
+  toJSON(): APIErrorJSON {
     const { message, httpStatus, httpStatusCode, httpStatusMessage } = this;
     return {
       message,
@@ -55,7 +67,7 @@ export class APIError extends Error {
     return new APIError(500, { message: 'Error' });
   }
 
-  static fromError(err: any): APIError {
+  static fromError(err: unknown): APIError {
     if (err instanceof APIError) {
       return err;
     }
