@@ -63,9 +63,7 @@ Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.
 ## TODOs
 
 - This works for only a couple of use-cases at the moment
-- Check the places where we have @ts-ignore and fix them
-- Fix all lint issues
-- Explore and change out apidoc to swagger (openapi) if that is easy
+- Add swagger integration
 - Add back integration tests for the API
 - Validation for all payload inputs
 

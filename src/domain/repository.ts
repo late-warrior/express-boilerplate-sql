@@ -1,7 +1,9 @@
+/* eslint-disable import/no-mutable-exports */
 /**
  * Models that are central to our application and follow the DDD pattern.
  */
-import { prisma } from '../infra/db';
+import { PrismaClient } from '@prisma/client';
+import { prisma } from '@src/infra/db';
 
 export let bloggerRepository = null;
 export let adminRepository = null;
@@ -15,63 +17,35 @@ export let adminRepository = null;
 // delete a user (admin)
 
 class BloggerRepository {
-  async findUser(id) {
-    const user = await prisma.user.findUnique({ where: { id } });
-    return user;
+  prisma: PrismaClient;
+
+  constructor(prismaClient) {
+    this.prisma = prismaClient;
   }
 
-  // async updateUserProfile(userId, profile) {
-  //   await prisma.
-  // }
-
-  // async storeUser(id, user) {
-  //   const storedUser = await prisma.app_user.upsert({
-  //     where: { id },
-  //     update: { ...user },
-  //     create: { ...user },
-  //   });
-  //   return User.fromDb(storedUser);
-  // }
-
-  // async removeUser(id) {
-  //   const deleteUser = await prisma.app_user.delete({
-  //     where: {
-  //       id,
-  //     },
-  //   });
-  // }
-
-  // async storeUserWithPosts() {
-  //   const createdUser = await prisma.app_user.create({
-  //     data: {
-  //       name: 'Alice',
-  //       email: 'alice@prisma.io',
-  //       posts: {
-  //         create: [
-  //           { title: 'My first day at Prisma' },
-  //           {
-  //             title: 'How to create an Microsoft SQL Server database',
-  //             content: 'A tutorial in progress!',
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   });
-  //   return User.fromDb(createdUser);
-  // }
+  async findUser(id: number) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    return user;
+  }
 }
 
 class AdminRepository {
+  prisma: PrismaClient;
+
+  constructor(prismaClient) {
+    this.prisma = prismaClient;
+  }
+
   async listAllUsers() {
-    const users = await prisma.user.findMany({});
+    const users = await this.prisma.user.findMany({});
     return users;
   }
 }
 
 if (!bloggerRepository) {
-  bloggerRepository = new BloggerRepository();
+  bloggerRepository = new BloggerRepository(prisma);
 }
 
 if (!adminRepository) {
-  adminRepository = new AdminRepository();
+  adminRepository = new AdminRepository(prisma);
 }

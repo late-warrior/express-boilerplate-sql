@@ -20,6 +20,7 @@ module.exports = {
     // eslint is unable to find the right extension in an ESM module
     'import/extensions': 0,
     'import/prefer-default-export': 0,
+    'max-classes-per-file': 0,
     'unicorn/prefer-module': 0,
     // null is a valid value for initialization
     'unicorn/no-null': 0,
