@@ -1,8 +1,11 @@
 /**
  * Domain driven design - keep the domain in the centre of all interactions.
+ *
+ * A Blogger is represented as a User in the database with the role 'Blogger'
+ *
  */
 import Prisma from '@prisma/client';
-import logger from '@src/infra/config/logger';
+import logger from '../infra/config/logger';
 import { bloggerRepository } from './repository';
 
 export class Blogger {
@@ -16,6 +19,12 @@ export class Blogger {
     const user = await bloggerRepository.findUser(id);
     logger.info('user here is', user);
     return new Blogger(user);
+  }
+
+  static async removePost(postId: number): Promise<boolean> {
+    logger.info('Going to delete post with id', postId);
+    const isDeleted = await bloggerRepository.deleteUserPost(postId);
+    return isDeleted;
   }
 
   // businessLogic() {

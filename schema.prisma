@@ -31,7 +31,7 @@ model User {
   name    String?
   posts   Post[]
   profile Profile?
-  role Role @default(BLOGGER)
+  roles   Role[]
 }
 
 enum Role {

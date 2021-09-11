@@ -2,11 +2,11 @@
  * Configure passport strategies for authorization.  Here we use JWT
  */
 
-import { Blogger } from '@src/domain/models';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import { Blogger } from '../domain/models';
 import { APIError } from './api-error';
 import { CONFIG } from './config/vars';
 

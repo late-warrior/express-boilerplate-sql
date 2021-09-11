@@ -3,7 +3,7 @@
  * Models that are central to our application and follow the DDD pattern.
  */
 import { PrismaClient } from '@prisma/client';
-import { prisma } from '@src/infra/db';
+import { prisma } from '../infra/db';
 
 export let bloggerRepository = null;
 export let adminRepository = null;
@@ -27,6 +27,34 @@ class BloggerRepository {
     const user = await this.prisma.user.findUnique({ where: { id } });
     return user;
   }
+
+  async deleteUserPost(postId) {
+    // Check if the user owns the post first
+    try {
+      await this.prisma.post.findUnique({
+        where: { id: postId },
+        rejectOnNotFound: true,
+        include: {
+          author: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+      await this.prisma.post.delete({
+        where: {
+          id: postId,
+        },
+      });
+      return true;
+    } catch (error) {
+      // Not authorized to delete
+      throw new Error(
+        `This user is not authorized to delete this post - ${error.message}`
+      );
+    }
+  }
 }
 
 class AdminRepository {
@@ -39,6 +67,10 @@ class AdminRepository {
   async listAllUsers() {
     const users = await this.prisma.user.findMany({});
     return users;
+  }
+
+  async deleteUserPost(postId) {
+    await this.prisma.post.delete({ where: { id: postId } });
   }
 }
 
