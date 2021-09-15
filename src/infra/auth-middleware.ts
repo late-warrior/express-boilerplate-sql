@@ -8,7 +8,7 @@ import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import { Blogger } from '../domain/models';
 import { APIError } from './api-error';
-import { CONFIG } from './config/vars';
+import { APP_CONSTANTS, CONFIG } from './config/vars';
 
 /**
  * Callback function after the JWT token is decoded
@@ -19,7 +19,6 @@ import { CONFIG } from './config/vars';
 async function jwtCb(payload, done) {
   try {
     const user = await Blogger.findOne(payload.sub);
-    // const user = { name: 'hardcoded-name', roles: ['ADMIN'] };
     if (user) return done(null, user);
     return done(null, false);
   } catch (error) {
@@ -27,21 +26,19 @@ async function jwtCb(payload, done) {
   }
 }
 
-export function sign(subject: string): string {
-  const secret = 'adfa';
-  const token = jwt.sign({}, secret, {
-    expiresIn: '1d',
+/**
+ * Generate a JWT token
+ * @param subject User identity (userId / email etc)
+ * @returns
+ */
+export function generateToken(subject: string): string {
+  const token = jwt.sign({}, CONFIG.jwtSecret, {
+    expiresIn: CONFIG.jwtExpirationInterval,
     subject,
-    issuer: 'my-app',
+    issuer: APP_CONSTANTS.APP_NAME,
   });
   return token;
 }
-
-// export function verifyCredential(userName, password) {
-//   // Verify
-//   // Passwords are stored in encrypted fashion in the database
-//   return 'token';
-// }
 
 export function getJWTStrategy(): passport.Strategy {
   const jwtOptions = {
@@ -58,7 +55,7 @@ function checkRoleAccess(allowedRoles, userRoles) {
 }
 
 /**
- * Sets up a callback function that is called after jwt verification
+ * Sets up a callback function that is called after jwt verification (success or failure)
  */
 function postJWTAuthorization(req, res, next, roles) {
   /**
@@ -102,8 +99,9 @@ function postJWTAuthorization(req, res, next, roles) {
 }
 
 /**
- * Authorization factory function that returns another function to help authorize
- * using the configured jwt strategy
+ * Authorization factory function that returns a RequestHandler to help authorize
+ * using the configured jwt strategy.  Successful authorization will result in the user
+ * object being placed in req.user
  */
 export function authorize(roles: Array<string>): express.RequestHandler {
   let routeRoles = roles;

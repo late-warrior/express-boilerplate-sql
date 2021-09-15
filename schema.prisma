@@ -14,15 +14,15 @@ model Post {
   title     String   @db.VarChar(255)
   content   String?
   published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Profile {
   id     Int     @id @default(autoincrement())
   bio    String?
-  user   User    @relation(fields: [userId], references: [id])
   userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -32,9 +32,31 @@ model User {
   posts   Post[]
   profile Profile?
   roles   Role[]
+  Token   Token[]
 }
 
 enum Role {
   BLOGGER
   ADMIN
+}
+
+// Storing the token in the database to make it stateful
+// This is useful for passwordless login through links or
+// for forcefully invalidating already issued tokens
+model Token {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  type       TokenType
+  emailToken String?   @unique // Only used for short lived email tokens
+  valid      Boolean   @default(true)
+  expiration DateTime
+  // Relation fields
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id])
+}
+
+enum TokenType {
+  EMAIL // used as a short lived token sent to the user's email
+  API
 }

@@ -2,7 +2,9 @@
 /**
  * Models that are central to our application and follow the DDD pattern.
  */
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
+import { CONFIG } from '@src/infra/config/vars';
+import { add } from 'date-fns';
 import { prisma } from '../infra/db';
 
 export let bloggerRepository = null;
@@ -80,4 +82,72 @@ if (!bloggerRepository) {
 
 if (!adminRepository) {
   adminRepository = new AdminRepository(prisma);
+}
+
+// Generate a random 8 digit number as the email token
+function generateEmailToken(): string {
+  return Math.floor(10_000_000 + Math.random() * 90_000_000).toString();
+}
+
+export async function issueMailToken(email: string): Promise<void> {
+  // While storing a token for passwordless login, we either create both user and token at the same
+  // time or create only the token if the user exists
+  const emailToken = generateEmailToken();
+  // 👇 create a date object for the email token expiration
+  const tokenExpiration = add(new Date(), {
+    minutes: CONFIG.emailTokenExpirationMinutes,
+  });
+  await prisma.token.create({
+    data: {
+      emailToken,
+      type: this.prisma.TokenType.EMAIL,
+      expiration: tokenExpiration,
+      user: {
+        connectOrCreate: {
+          create: {
+            email,
+          },
+          where: {
+            email,
+          },
+        },
+      },
+    },
+  });
+}
+
+/**
+ * Validates the email token issued to the user
+ * @param email
+ * @param emailToken
+ * @returns
+ */
+export async function validateMailToken(
+  email: string,
+  emailToken: string
+): Promise<User> {
+  // Get short lived email token
+  const fetchedEmailToken = await prisma.token.findUnique({
+    where: {
+      emailToken,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!fetchedEmailToken?.valid) {
+    // If the token doesn't exist or is not valid, return 401 unauthorized
+    throw new Error('Token not valid');
+  }
+
+  if (fetchedEmailToken.expiration < new Date()) {
+    // If the token has expired, return 401 unauthorized
+    throw new Error('Token expired');
+  }
+  // If token matches the user email passed in the payload, generate long lived API token
+  if (fetchedEmailToken?.user?.email !== email) {
+    throw new Error('Invalid token for this user');
+  }
+  return fetchedEmailToken.user;
 }

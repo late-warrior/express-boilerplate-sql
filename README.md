@@ -76,3 +76,9 @@ Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.
 # Contributions
 
 Contributions and improvements welcome. Please log an issue with your proposal and changes
+
+# Other boilerplates
+
+Some other useful references applications I discovered while writing this -
+
+- [Real world grading app](https://github.com/2color/real-world-grading-app/) - Stack built with hapi.js and Prisma

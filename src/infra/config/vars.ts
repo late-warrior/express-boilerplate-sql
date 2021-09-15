@@ -16,6 +16,9 @@ export const CONFIG = {
   port: process.env.PORT,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpirationInterval: process.env.JWT_EXPIRATION_MINUTES,
+  emailTokenExpirationMinutes: Number.parseFloat(
+    process.env.EMAIL_TOKEN_EXPIRATION_MINUTES
+  ),
   kafkaBrokers: process.env.KAFKA_BROKERS.split(','),
   sqlServer: {},
   logs: process.env.NODE_ENV === 'production' ? 'combined' : 'dev',
@@ -25,4 +28,8 @@ export const CONFIG = {
     username: process.env.EMAIL_USERNAME,
     password: process.env.EMAIL_PASSWORD,
   },
+};
+
+export const APP_CONSTANTS = {
+  APP_NAME: 'express-boilerplate',
 };
