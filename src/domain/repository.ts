@@ -3,9 +3,9 @@
  * Models that are central to our application and follow the DDD pattern.
  */
 import { PrismaClient, User } from '@prisma/client';
-import { CONFIG } from '@src/infra/config/vars';
 import { add } from 'date-fns';
-import { prisma } from '../infra/db';
+import { CONFIG } from '../infra/config/vars';
+import { prisma, TokenType } from '../infra/db';
 
 export let bloggerRepository = null;
 export let adminRepository = null;
@@ -89,7 +89,7 @@ function generateEmailToken(): string {
   return Math.floor(10_000_000 + Math.random() * 90_000_000).toString();
 }
 
-export async function issueMailToken(email: string): Promise<void> {
+export async function issueMailToken(email: string): Promise<string> {
   // While storing a token for passwordless login, we either create both user and token at the same
   // time or create only the token if the user exists
   const emailToken = generateEmailToken();
@@ -100,7 +100,7 @@ export async function issueMailToken(email: string): Promise<void> {
   await prisma.token.create({
     data: {
       emailToken,
-      type: this.prisma.TokenType.EMAIL,
+      type: TokenType.EMAIL,
       expiration: tokenExpiration,
       user: {
         connectOrCreate: {
@@ -114,6 +114,7 @@ export async function issueMailToken(email: string): Promise<void> {
       },
     },
   });
+  return emailToken;
 }
 
 /**
@@ -138,7 +139,7 @@ export async function validateMailToken(
 
   if (!fetchedEmailToken?.valid) {
     // If the token doesn't exist or is not valid, return 401 unauthorized
-    throw new Error('Token not valid');
+    throw new Error('Token does not exist or is not valid');
   }
 
   if (fetchedEmailToken.expiration < new Date()) {

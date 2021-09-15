@@ -1,3 +1,4 @@
+import { ValidationError } from 'express-validation';
 import h from 'http-status';
 
 interface APIErrorOptions {
@@ -70,6 +71,11 @@ export class APIError extends Error {
   static fromError(err: unknown): APIError {
     if (err instanceof APIError) {
       return err;
+    }
+    if (err instanceof ValidationError) {
+      return new APIError(err.statusCode, {
+        message: JSON.stringify(err.details),
+      });
     }
     if (err instanceof Error) {
       return new APIError(500, { message: err.message });
