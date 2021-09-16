@@ -73,6 +73,14 @@ Testing setup boilerplate taken from [node-typescript-esm-setup](https://github.
 - We choose this domain since Prisma examples are easier to copy-paste as they use the same domain
 - This app aims to demonstrate different types of roles -admin, blogger as well as routes that are accessible to a few roles
 
+## SSL
+
+- For local development, you can generate an SSL key like below -
+
+```
+$> openssl req -newkey rsa:4096             -x509             -sha256             -days 3650             -nodes             -out example.crt             -keyout example.key             -subj "/C=IN/ST=TN/L=VNR/O=late-warrior/OU=IT/CN=www.rusticwork.in"
+```
+
 # Contributions
 
 Contributions and improvements welcome. Please log an issue with your proposal and changes

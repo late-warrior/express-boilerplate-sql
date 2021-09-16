@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import compress from 'compression';
 import cors from 'cors';
 import express from 'express';
@@ -25,8 +24,8 @@ app.use(favicon(path.resolve('public', 'favicon.ico')));
 app.use(morgan(CONFIG.logs));
 
 // parse body params and attach them to req.body
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // gzip compression
 app.use(compress());
