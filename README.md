@@ -19,6 +19,12 @@ This was originally taken from the boilerplate [here](https://github.com/danielf
 - Debugging - `yarn debug:node` - on the fly compilation of `src` without nodemon meant to be started from the debug console
 - Deployment - `yarn start` - compiles `src` into `dist` and starts `pm2` from there
 - Testing - `yarn test-only` - to run tests without coverage and `yarn test` for running with coverage
+- Useful `pm2` commands -
+
+```
+$> npx pm2 status
+$> npx pm2 logs
+```
 
 ## Folder structure
 
