@@ -12,12 +12,13 @@ on:
 
 jobs:
   cover:
+    runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Get Coverage for badge
         run: |
-        COVERAGE_STATEMENTS_TOTAL="$(jq '.total.statements.pct' c8-coverage/coverage-summary.json)"
-        echo "COVERAGE=$(echo ${COVERAGE_STATEMENTS_TOTAL})" >> $GITHUB_ENV
+          COVERAGE_STATEMENTS_TOTAL="$(jq '.total.statements.pct' c8-coverage/coverage-summary.json)"
+          echo "COVERAGE=$(echo ${COVERAGE_STATEMENTS_TOTAL})" >> $GITHUB_ENV
 
       - name: Create the Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
