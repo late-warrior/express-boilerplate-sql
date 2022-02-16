@@ -22,3 +22,18 @@ jobs:
           cache-dependency-path: '**/yarn.lock'
       - run: yarn install
       - run: yarn test
+      - name: Get Coverage for badge
+        run: |
+          COVERAGE_STATEMENTS_TOTAL="$(jq '.total.statements.pct' ./c8-coverage/coverage-summary.json)"
+          echo "COVERAGE=$(echo ${COVERAGE_STATEMENTS_TOTAL})" >> $GITHUB_ENV
+
+      - name: Create the Badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: fba0ebbf0edcc485926bb1b0905c3774
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.COVERAGE }}
+          color: green
+          namedLogo: jest
