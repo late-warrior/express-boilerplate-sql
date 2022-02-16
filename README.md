@@ -1,4 +1,4 @@
-# Production ready expressjs app
+# Production ready expressjs app ![@prisma/client version](https://img.shields.io/badge/@prisma/client-3.9.2-brightgreen) ![pm2 version](https://img.shields.io/badge/pm2-5.1.2-brightgreen) ![express version](https://img.shields.io/badge/express-4.17.2-brightgreen) ![kafkajs version](https://img.shields.io/badge/kafkajs-1.16.0-brightgreen) ![typescript version](https://img.shields.io/badge/typescript-4.5.5-brightgreen) ![ts-node version](https://img.shields.io/badge/ts--node-10.5.0-brightgreen) ![mocha version](https://img.shields.io/badge/mocha-9.2.0-brightgreen)
 
 This was originally taken from the boilerplate [here](https://github.com/danielfsousa/express-rest-es2017-boilerplate) but has been modified extensively that a changelog alone is not sufficient. This assumes a pure API project - without having to worry about flows like 'Sign-up mail' or 'Sign in'
 
